@@ -9,11 +9,24 @@
   <script src="../lib/scmath.js"></script>
   <script src="../lib/p5.min.js"></script>
   <script src="../lib/p5.dom.min.js"></script>
+  <script src="../lib/CCapture.all.min.js"></script>
+  <script src="../lib/gif.worker.js"></script>
 </head>
 
 <body>
+
+  <script type="text/javascript">
+    var capturer = new CCapture({
+      framerate: 60,
+      format: 'gif',
+      workersPath: "../lib/",
+      verbose: true
+    });
+  </script>
+
   <script type="text/javascript">
     let partitions;
+    let canvas;
     let side;
     let N;
     let hue;
@@ -23,46 +36,48 @@
     let timer;
 
     function setup() {
-      slider1 = createSlider(2, 10, 4);
+      slider1 = createSlider(2, 10, 7);
       slider2 = createSlider(1, 1000, 500);
       button = createButton("Show partitions");
 
       N = slider1.value();
       hue = 0;
       interval = 500;
-      
+
       createElement("br");
       createElement("br");
       side = 800;
-      createCanvas(side, side);
+      var p5canvas = createCanvas(side, side);
+      canvas = p5canvas.canvas;
       background(207);
+      // capturer.start();
 
-      button.mousePressed(function () {
-        clearInterval(timer);
+      clearInterval(timer);
 
-        N = slider1.value();
-        interval = slider2.value();
-        console.log(N);
-        partitions = getPartitions(N);
+      N = slider1.value();
+      interval = slider2.value();
+      console.log(N);
+      partitions = getPartitions(N);
+      currentIndex = 0;
 
-        // Get the first partition
-        currentIndex = 0;
-        let partition = partitions[currentIndex];
+    }
 
-        // Draw first partition
-        drawFrame(partition);
+    function draw() {
+      partition = partitions[currentIndex];
+      drawFrame(partition);
+      // capturer.capture(canvas);
+      if (currentIndex >= partitions.length - 1) {
 
-        // Draw each subsequent partition after the given interval
-        timer = setInterval(function () {
-          if (currentIndex < partitions.length - 1)
-            currentIndex++;
-          else 
-            return;
-          partition = partitions[currentIndex];
-          drawFrame(partition)
-        }, interval);
-      });
-
+      }
+      if (frameCount % 1 == 0) {
+        if (currentIndex < partitions.length - 1) {
+          currentIndex++;
+        } else {
+          // capturer.stop();
+          // capturer.save();
+        }
+      }
+      console.log(frameCount, currentIndex, partitions.length);
     }
 
     function drawFrame(partition) {
@@ -72,7 +87,6 @@
       drawCount();
       drawTitle();
     }
-
     function drawLines(block) {
       if (block.length <= 1)
         return;
@@ -99,22 +113,27 @@
 
         strokeWeight(7);
         ellipse(coords.x, coords.y, radius, radius);
+        textFont('Cambria');
         textAlign(CENTER, CENTER);
         textSize(radius / 2);
-        text(i, coords.x, coords.y);
+        text(i+1, coords.x, coords.y);
       }
     }
 
     function drawCount() {
       textAlign(RIGHT, BOTTOM);
-      textSize(25);
+      textSize(30);
+      textStyle(BOLD);
+      textFont('Calibri');
       text((currentIndex + 1) + " / " + partitions.length, side * 0.985, side * 0.985);
     }
 
     function drawTitle() {
-      textAlign(LEFT, BOTTOM);
-      textSize(25);
-      text(N + "-element set partitions", side * 0.015, side * 0.985);
+      textAlign(LEFT, TOP);
+      textSize(45);
+      textStyle(BOLD);
+      textFont('Calibri');
+      text(N + "-element set partitions", side * 0.015, side * 0.015);
     }
 
     function getPartitions(N) {
@@ -129,13 +148,13 @@
       let angle = TWO_PI / N;
       let cx = side / 2,
         cy = side / 2;
-      let radius = side * 2 / 5;
+      let radius = side * 32 / 100;
       let x = cx + cos(index * angle - TWO_PI / 4) * radius;
       let y = cy + sin(index * angle - TWO_PI / 4) * radius;
       return { x: x, y: y }
     }
 
-    
+
 
     function arrayToSetString(array) {
 
