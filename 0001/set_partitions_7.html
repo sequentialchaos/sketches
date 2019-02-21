@@ -23,12 +23,16 @@
     let timer;
 
     function setup() {
-      slider1 = createSlider(2, 11, 4);
-      slider2 = createSlider(1, 1000, 500);
+      let label1 = createElement("span", "Number of elements: ");
+      slider1 = createInput(7, "number");
+
+      let label2 = createElement("span", "  Wait interval (ms): ");
+      slider2 = createInput(350, "number");
+      
       button = createButton("Show partitions");
 
       N = slider1.value();
-      hue = 0;
+      
       interval = 500;
       
       createElement("br");
@@ -40,7 +44,8 @@
       button.mousePressed(function () {
         clearInterval(timer);
 
-        N = slider1.value();
+        N = Number(slider1.value());
+        hue = 255 / N;
         interval = slider2.value();
         console.log(N);
         partitions = getPartitions(N);
@@ -71,50 +76,82 @@
       drawVertices();
       drawCount();
       drawTitle();
+      drawStringRepresentation(partition);
     }
 
-    function drawLines(block) {
+    function drawLines(block, j) {
       if (block.length <= 1)
         return;
+
+      let shape = beginShape();
+      colorMode(HSB, 255);
+      let c = color(255 - hue * (j+1), 190, 210);
+      shape.fill(c);
       for (let i = 0; i < block.length; i++) {
         let v1 = block[i],
           v2 = block[(i + 1) % block.length],
           c1 = coordinates(v1),
           c2 = coordinates(v2);
+
         strokeWeight(7);
-        line(c1.x, c1.y, c2.x, c2.y);
+        vertex(c1.x, c1.y);
+        vertex(c2.x, c2.y);
       }
+      endShape();
     }
 
     function drawPartition(partition) {
-      partition.forEach(block => {
-        drawLines(block);
+      let hue = 0;
+      partition.forEach((block, i) => {
+        drawLines(block, i);
       });
     }
 
     function drawVertices() {
-      for (let i = 0; i < N; i++) {
+      for (let i = 1; i < N+1; i++) {
         let coords = coordinates(i, N, side, side);
         let radius = side / 10;
 
+        // Vertex
         strokeWeight(7);
+        fill(255);
         ellipse(coords.x, coords.y, radius, radius);
+
+        // Label
+        fill(5);
+        textFont('Cambria')
+        textStyle(BOLD);
         textAlign(CENTER, CENTER);
         textSize(radius / 2);
-        text(i+1, coords.x, coords.y);
+        text(i, coords.x, coords.y);
       }
     }
 
+    function drawStringRepresentation(partition) {
+      fill(0);
+      textAlign(LEFT, BOTTOM);
+      textSize(30);
+      textStyle(BOLD);
+      textFont('Calibri');
+      text(setPartitionToString(partition), side * 0.015, side * 0.985);
+    }
+
     function drawCount() {
+      fill(0);
       textAlign(RIGHT, BOTTOM);
-      textSize(25);
+      textSize(30);
+      textStyle(BOLD);
+      textFont('Calibri');
       text((currentIndex + 1) + " / " + partitions.length, side * 0.985, side * 0.985);
     }
 
     function drawTitle() {
-      textAlign(LEFT, BOTTOM);
-      textSize(25);
-      text(N + "-element set partitions", side * 0.015, side * 0.985);
+      fill(0);
+      textAlign(LEFT, TOP);
+      textSize(45);
+      textStyle(BOLD);
+      textFont('Calibri');
+      text(N + "-element set partitions", side * 0.015, side * 0.015);
     }
 
     function getPartitions(N) {
@@ -128,10 +165,10 @@
     function coordinates(index) {
       let angle = TWO_PI / N;
       let cx = side / 2,
-        cy = side / 2;
-      let radius = side * 2 / 5;
-      let x = cx + cos(index * angle - TWO_PI / 4) * radius;
-      let y = cy + sin(index * angle - TWO_PI / 4) * radius;
+          cy = side * 53 / 100;
+      let radius = side * 32 / 100;
+      let x = cx + cos(index * angle - TWO_PI / 4 - angle) * radius;
+      let y = cy + sin(index * angle - TWO_PI / 4 - angle) * radius;
       return { x: x, y: y }
     }
 

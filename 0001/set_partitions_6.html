@@ -99,6 +99,8 @@
 
         strokeWeight(7);
         ellipse(coords.x, coords.y, radius, radius);
+        textFont('Cambria')
+        textStyle(BOLD);
         textAlign(CENTER, CENTER);
         textSize(radius / 2);
         text(i+1, coords.x, coords.y);
@@ -107,14 +109,18 @@
 
     function drawCount() {
       textAlign(RIGHT, BOTTOM);
-      textSize(25);
+      textSize(30);
+      textStyle(BOLD);
+      textFont('Calibri');
       text((currentIndex + 1) + " / " + partitions.length, side * 0.985, side * 0.985);
     }
 
     function drawTitle() {
-      textAlign(LEFT, BOTTOM);
-      textSize(25);
-      text(N + "-element set partitions", side * 0.015, side * 0.985);
+      textAlign(LEFT, TOP);
+      textSize(45);
+      textStyle(BOLD);
+      textFont('Calibri');
+      text(N + "-element set partitions", side * 0.015, side * 0.015);
     }
 
     function getPartitions(N) {
@@ -128,8 +134,8 @@
     function coordinates(index) {
       let angle = TWO_PI / N;
       let cx = side / 2,
-        cy = side / 2;
-      let radius = side * 2 / 5;
+          cy = side * 53 / 100;
+      let radius = side * 32 / 100;
       let x = cx + cos(index * angle - TWO_PI / 4) * radius;
       let y = cy + sin(index * angle - TWO_PI / 4) * radius;
       return { x: x, y: y }
