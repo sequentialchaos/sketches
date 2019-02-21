@@ -19,27 +19,31 @@
     let hue;
     let interval;
     let currentIndex;
-    let button;
+    let slider1, slider2, button;
+    let timer;
 
     function setup() {
-      side = 800;
-      N = 4;
+      slider1 = createSlider(2, 10, 4);
+      slider2 = createSlider(1, 1000, 500);
+      button = createButton("Show partitions");
+
+      N = slider1.value();
       hue = 0;
       interval = 500;
-
-      button = createButton("Show partitions");
-      createP("");
+      
+      createElement("br");
+      createElement("br");
+      side = 800;
       createCanvas(side, side);
       background(207);
 
       button.mousePressed(function () {
-        // Get all set partitions of {0, 1, ..., N-1}
-        partitions = [];
-        for (let partition of setPartitions(N))
-          partitions.push(partition);
+        clearInterval(timer);
 
-        // Sort set partitions by most blocks
-        partitions.sort(p => -p.length);
+        N = slider1.value();
+        interval = slider2.value();
+        console.log(N);
+        partitions = getPartitions(N);
 
         // Get the first partition
         currentIndex = 0;
@@ -49,7 +53,7 @@
         drawFrame(partition);
 
         // Draw each subsequent partition after the given interval
-        setInterval(function () {
+        timer = setInterval(function () {
           if (currentIndex < partitions.length - 1)
             currentIndex++;
           else 
@@ -65,7 +69,16 @@
       background(207);
       drawPartition(partition);
       drawVertices();
-      text((currentIndex + 1) + " / " + partitions.length, side * 0.93, side * 0.97);
+      textAlign(RIGHT, CENTER);
+      text((currentIndex + 1) + " / " + partitions.length, side * 0.97, side * 0.97);
+    }
+
+    function getPartitions(N) {
+      // Get all set partitions of {0, 1, ..., N-1}
+      partitions = [];
+      for (let partition of setPartitions(N))
+        partitions.push(partition);
+      return partitions;
     }
 
     function coordinates(index) {

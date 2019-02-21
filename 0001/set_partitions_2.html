@@ -19,32 +19,29 @@
     let hue;
     let interval;
     let currentIndex;
-    let slider, button;
+    let slider1, button;
     let timer;
 
     function setup() {
-      slider = createSlider(1, 10, 4);
+      slider1 = createSlider(2, 10, 4);
       button = createButton("Show partitions");
 
-      N = slider.value();
+      N = slider1.value();
       hue = 0;
       interval = 500;
       
-      createP("");
-
+      createElement("br");
+      createElement("br");
       side = 800;
       createCanvas(side, side);
       background(207);
 
       button.mousePressed(function () {
         clearInterval(timer);
-        // Get all set partitions of {1, 2, ..., N}
-        partitions = [];
-        for (let partition of setPartitions(N))
-          partitions.push(partition);
 
-        // Sort set partitions by most blocks
-        partitions.sort(p => -p.length);
+        N = slider1.value();
+        console.log(N);
+        partitions = getPartitions(N);
 
         // Get the first partition
         currentIndex = 0;
@@ -61,7 +58,7 @@
             return;
           partition = partitions[currentIndex];
           drawFrame(partition)
-        }, interval);
+        }, 500);
       });
 
     }
@@ -70,8 +67,16 @@
       background(207);
       drawPartition(partition);
       drawVertices();
-      text((currentIndex + 1) + " / " + partitions.length, side * 0.93, side * 0.97);
-      text(partition, side * 0.03, side * 0.97);
+      textAlign(RIGHT, CENTER);
+      text((currentIndex + 1) + " / " + partitions.length, side * 0.97, side * 0.97);
+    }
+
+    function getPartitions(N) {
+      // Get all set partitions of {0, 1, ..., N-1}
+      partitions = [];
+      for (let partition of setPartitions(N))
+        partitions.push(partition);
+      return partitions;
     }
 
     function coordinates(index) {
