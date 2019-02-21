@@ -69,28 +69,9 @@
       background(207);
       drawPartition(partition);
       drawVertices();
-      textAlign(RIGHT, CENTER);
-      text((currentIndex + 1) + " / " + partitions.length, side * 0.97, side * 0.97);
+      drawCount();
+      drawTitle();
     }
-
-    function getPartitions(N) {
-      // Get all set partitions of {0, 1, ..., N-1}
-      partitions = [];
-      for (let partition of setPartitions(N))
-        partitions.push(partition);
-      return partitions;
-    }
-
-    function coordinates(index) {
-      let angle = TWO_PI / N;
-      let cx = side / 2,
-        cy = side / 2;
-      let radius = side * 2 / 5;
-      let x = cx + cos(index * angle - TWO_PI / 4) * radius;
-      let y = cy + sin(index * angle - TWO_PI / 4) * radius;
-      return { x: x, y: y }
-    }
-
     function drawLines(block) {
       if (block.length <= 1)
         return;
@@ -113,15 +94,47 @@
     function drawVertices() {
       for (let i = 0; i < N; i++) {
         let coords = coordinates(i, N, side, side);
-        let radius = side / 15;
+        let radius = side / 10;
 
-        strokeWeight(5);
+        strokeWeight(7);
         ellipse(coords.x, coords.y, radius, radius);
         textAlign(CENTER, CENTER);
         textSize(radius / 2);
         text(i, coords.x, coords.y);
       }
     }
+
+    function drawCount() {
+      textAlign(RIGHT, BOTTOM);
+      textSize(25);
+      text((currentIndex + 1) + " / " + partitions.length, side * 0.985, side * 0.985);
+    }
+
+    function drawTitle() {
+      textAlign(LEFT, BOTTOM);
+      textSize(25);
+      text(N + "-element set partitions", side * 0.015, side * 0.985);
+    }
+
+    function getPartitions(N) {
+      // Get all set partitions of {0, 1, ..., N-1}
+      partitions = [];
+      for (let partition of setPartitions(N))
+        partitions.push(partition);
+      return partitions;
+    }
+
+    function coordinates(index) {
+      let angle = TWO_PI / N;
+      let cx = side / 2,
+        cy = side / 2;
+      let radius = side * 2 / 5;
+      let x = cx + cos(index * angle - TWO_PI / 4) * radius;
+      let y = cy + sin(index * angle - TWO_PI / 4) * radius;
+      return { x: x, y: y }
+    }
+
+    
 
     function arrayToSetString(array) {
 

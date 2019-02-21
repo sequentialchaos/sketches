@@ -56,7 +56,7 @@
       background(207);
       drawPartition(partition);
       drawVertices();
-      text((currentIndex + 1) + " / " + partitions.length, side * 0.93, side * 0.97);
+      text((currentIndex + 1) + " / " + partitions.length, side * 0.92, side * 0.97);
     }
 
     function coordinates(index) {
@@ -91,9 +91,9 @@
     function drawVertices() {
       for (let i = 0; i < N; i++) {
         let coords = coordinates(i, N, side, side);
-        let radius = side / 15;
+        let radius = side / 10;
 
-        strokeWeight(5);
+        strokeWeight(7);
         ellipse(coords.x, coords.y, radius, radius);
         textAlign(CENTER, CENTER);
         textSize(radius / 2);
