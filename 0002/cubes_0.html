@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cubes</title>
+  <script src="../lib/p5.min.js"></script>
+  <script src="../lib/p5.dom.min.js"></script>
+</head>
+
+<body>
+  <script type="text/javascript">
+    let angle;
+    let width;
+    let s;
+    let xView, yView;
+
+    function setup() {
+      createCanvas(500, 500, WEBGL);
+      angle = 0;
+      s = 300;
+      xViewOffset = atan(cos(QUARTER_PI));
+      yViewOffset = -QUARTER_PI;
+      maxD = dist(0, 0, 200, 200);
+    }
+
+    function draw() {
+      background("#418D67");
+
+      ortho(-400, 400, 400, -400, 0, 1000);
+
+      rotateX(xViewOffset);
+      rotateY(yViewOffset);
+
+      push();
+      rotateY(angle);
+      rotateX(angle);
+      normalMaterial()
+      fill(50, 200, 180, 50);
+      stroke(0);
+      strokeWeight(9);
+      box(s, s, s);
+      pop();
+    
+      angle -= 0.04;
+    }
+  </script>
+</body>
+
+</html>
