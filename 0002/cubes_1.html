@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Cubes</title>
+  <script src="../lib/p5.min.js"></script>
+  <script src="../lib/p5.dom.min.js"></script>
+  <!-- <script src="../lib/CCapture.all.min.js"></script>
+  <script src="../lib/gif.worker.js"></script> -->
+</head>
+
+<body>
+
+  <!-- <script type="text/javascript">
+    var capturer = new CCapture({
+      framerate: 30,
+      format: 'gif',
+      workersPath: "../lib/",
+      verbose: true
+    });
+  </script> -->
+  <script type="text/javascript">
+    let width;
+    let angle;
+    let s;
+    let xView, yView;
+
+    function setup() {
+      width = 500;
+      createCanvas(width, width, WEBGL);
+      angle = 0;
+      s = 300;
+      xViewOffset = atan(cos(QUARTER_PI));
+      yViewOffset = -QUARTER_PI;
+      // capturer.start();
+    }
+
+    function draw() {
+      if (angle >= TWO_PI) {
+        // capturer.stop();
+        // capturer.save();
+      }
+      background("#418D67");
+
+      ortho(-300, 300, 300, -300, 0, 1000);
+
+      rotateX(xViewOffset);
+      rotateY(yViewOffset);
+
+      push();
+      rotateX(angle);
+      rotateY(angle/2);
+      rotateZ(angle);
+      normalMaterial()
+      fill(50, 200, 180, 50);
+      stroke(0);
+      strokeWeight(9);
+      box(s, s, s);
+      pop();
+      // capturer.capture(document.getElementById('defaultCanvas0'));
+      angle += PI / 200;
+    }
+  </script>
+</body>
+
+</html>
