@@ -19,34 +19,49 @@
     let hue;
     let interval;
     let currentIndex;
-    let slider1, slider2, button;
+    let input1, input2, button;
     let timer;
+    let paused;
 
     function setup() {
       let label1 = createElement("span", "Number of elements: ");
-      slider1 = createInput(7, "number");
+      input1 = createInput(5, "number").size(35, 15);
+      input1.attribute("min", 2);
+      input1.attribute("max", 11);
 
       let label2 = createElement("span", "  Wait interval (ms): ");
-      slider2 = createInput(350, "number");
-      
-      button = createButton("Show partitions");
+      input2 = createInput(500, "number").size(68, 15);
+      input2.attribute("min", 1);
+      input2.attribute("max", 120000);
 
-      N = slider1.value();
+      createElement("span", " ");
+      button = createButton("Show partitions");
+      createElement("span", " ");
       
+
+      N = input1.value();
+
       interval = 500;
-      
+
       createElement("br");
       createElement("br");
       side = 800;
       createCanvas(side, side);
+      createElement("br");
       background(207);
 
+      let button_toggle_pause;
       button.mousePressed(function () {
         clearInterval(timer);
 
-        N = Number(slider1.value());
+        paused = false;
+        if (button_toggle_pause == null)
+          button_toggle_pause = createButton("Pause");
+        button_toggle_pause.html("Pause");
+
+        N = Number(input1.value());
         hue = 255 / N;
-        interval = slider2.value();
+        interval = input2.value();
         console.log(N);
         partitions = getPartitions(N);
 
@@ -59,10 +74,23 @@
 
         // Draw each subsequent partition after the given interval
         timer = setInterval(function () {
-          if (currentIndex < partitions.length - 1)
-            currentIndex++;
-          else 
-            return;
+          button_toggle_pause.mousePressed(function () {
+            if (paused) {
+              paused = false;
+              button_toggle_pause.html("Pause");
+            }
+            else {
+              paused = true;
+              button_toggle_pause.html("Play");
+            }
+          })
+          if (!paused) {
+            if (currentIndex < partitions.length - 1)
+              currentIndex++;
+            else
+              return;
+          } 
+
           partition = partitions[currentIndex];
           drawFrame(partition)
         }, interval);
@@ -85,7 +113,7 @@
 
       let shape = beginShape();
       colorMode(HSB, 255);
-      let c = color(255 - hue * (j+1), 190, 210);
+      let c = color(255 - hue * (j + 1), 190, 210);
       shape.fill(c);
       for (let i = 0; i < block.length; i++) {
         let v1 = block[i],
@@ -108,7 +136,7 @@
     }
 
     function drawVertices() {
-      for (let i = 1; i < N+1; i++) {
+      for (let i = 1; i < N + 1; i++) {
         let coords = coordinates(i, N, side, side);
         let radius = side / 10;
 
@@ -165,14 +193,14 @@
     function coordinates(index) {
       let angle = TWO_PI / N;
       let cx = side / 2,
-          cy = side * 53 / 100;
+        cy = side * 53 / 100;
       let radius = side * 32 / 100;
       let x = cx + cos(index * angle - TWO_PI / 4 - angle) * radius;
       let y = cy + sin(index * angle - TWO_PI / 4 - angle) * radius;
       return { x: x, y: y }
     }
 
-    
+
 
     function arrayToSetString(array) {
 
