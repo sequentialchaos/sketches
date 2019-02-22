@@ -12,15 +12,15 @@
 
 <body>
   <script type="text/javascript">
-    let angle;
     let width;
+    let angle;
     let s;
     let xView, yView;
 
     function setup() {
       createCanvas(500, 500, WEBGL);
       angle = 0;
-      s = 300;
+      s = 250;
       xViewOffset = atan(cos(QUARTER_PI));
       yViewOffset = -QUARTER_PI;
       maxD = dist(0, 0, 200, 200);
@@ -29,7 +29,7 @@
     function draw() {
       background("#418D67");
 
-      ortho(-400, 400, 400, -400, 0, 1000);
+      ortho(-300, 300, 300, -300, 0, 1000);
 
       rotateX(xViewOffset);
       rotateY(yViewOffset);
@@ -44,7 +44,7 @@
       box(s, s, s);
       pop();
     
-      angle -= 0.04;
+      angle += PI / 200;
     }
   </script>
 </body>
