@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title></title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+</head>
+
+<body>
+  <script type="text/javascript">
+    let width, height;
+    let interval, angle, radius, detailX, detailY;
+    function setup() {
+      width = 800
+      height = width;
+      createCanvas(width, height, WEBGL);
+      interval = 75;
+      angle = TWO_PI / interval;
+      radius = width * 30 / 100;
+      detailX = 1;
+      detailY = 1;
+      xViewOffset = atan(PI / 7);
+      // zViewOffset = PI * 3 / 4;
+    }
+
+    function draw() {
+      ortho(-300, 300, 300, -300, 0, 800);
+      rotateX(xViewOffset);
+      //rotateZ(zViewOffset);
+
+      //rotateZ(40);
+      background(0, 10, 20, 230)
+      // ambientLight(150);
+      // ambientMaterial(250);
+      fill(20, 50, 80, 230)
+      smooth();
+      stroke(10, 50, 80);
+      strokeWeight(9);
+      rotateY(angle);
+      //rotateZ(angle);
+      push();
+      sphere(radius, detailX % 25, detailY % 25);
+      pop();
+      if (frameCount % interval == 0 && detailX <= 23 && detailY <= 23) {
+        console.log(detailX, detailY, angle / TWO_PI);
+        detailX += 1;
+        detailY += 1;
+      }
+
+      angle += TWO_PI / interval;
+      //pointLight(width / 2, height / 2, width / 2, 0, 30, 50);
+    }
+  </script>
+</body>
+
+</html>
