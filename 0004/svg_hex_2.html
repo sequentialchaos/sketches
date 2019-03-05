@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Hexagons</title>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <style type="text/css">
+    html, body {
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+</head>
+<body>
+  <script type="text/javascript">
+
+    let w = window.innerWidth,
+        h = window.innerHeight;
+
+    let svg = d3.select("body")
+      .append("svg")
+        .attr("width", w)
+        .attr("height", h)
+        .attr("viewBox", [(-w/2), (-h/2), w, h].join(" ")) // center at (0, 0)
+        .attr("transform", "scale(1, -1)"); // flip y
+
+    // background
+    svg.append("rect")
+        .attr("x", (-w/2))
+        .attr("y", (-h/2))
+        .attr("width", w)
+        .attr("height", h)
+        .attr("fill", "black");
+
+
+    let hexPath = function(r) {
+      const SQRT3 = Math.sqrt(3);
+      const unitHex = [
+        [0, -1],          // (0) move to S (south point)
+        [SQRT3/2, 0.5],   // (1) S to SE (from south point to southeast point)
+        [0, 1],           // (2) SE to NE
+        [-SQRT3/2, 0.5],  // (3) NE to N
+        [-SQRT3/2, -0.5], // (4) N to NW
+        [0, -1],          // (5) NW to SW
+        [SQRT3/2, -0.5]   // (6) SW to S 
+      ];
+      return 'm ' + unitHex.map(p => {
+        return [ 
+          r * p[0], 
+          r * p[1]
+        ].join(" ")          
+      }).join(" l ") + " z";
+    }
+    const SQRT3 = Math.sqrt(3);
+    const unitHex = [
+      [0, -1],          // (0) move to S (south) point
+      [SQRT3/2, 0.5],   // (1) S to SE (from south point to southeast point)
+      [0, 1],           // (2) SE to NE
+      [-SQRT3/2, 0.5],  // (3) NE to N
+      [-SQRT3/2, -0.5], // (4) N to NW
+      [0, -1],          // (5) NW to SW
+      [SQRT3/2, -0.5]   // (6) SW to S 
+    ];
+
+    let hexagon = function(r, cx, cy, options) {
+      let path = svg.append("path")
+        .attr("d", hexPath(r))
+        .attr("transform", "translate(" + cx + "," + cy + ")");
+      for (let attr in options) {
+        path.attr(attr, options[attr]);
+      }
+      return path;
+    }
+    
+    let r = Math.round(h/10);
+
+    let j = 0;
+    for (let y = h/2; y > -h/2 - r; y -= r*1.5) {
+      let i = 0;
+      for (let x = -w/2 + r * SQRT3 / 2; x < w; x += r * SQRT3) {
+        cx = x*1;
+        if (j % 2 == 1) {
+          cx -= r * SQRT3 / 2;
+        }
+        hexagon(r, cx, y, options={
+          id: "r" + r + "x" + cx + "y" + y,
+          class: "hexagon",
+          fill: "#09AAA9",
+          stroke: "black", 
+          "stroke-width": "8px"
+        })
+        i++;
+      }
+      j++;
+    }
+
+    // // origin
+    // svg.append("circle")
+    //   .attr("cx", 0)
+    //   .attr("cy", 0)
+    //   .attr("r", 5)
+    //   .attr("fill", "white");
+    </script>
+</body>
+</html>
