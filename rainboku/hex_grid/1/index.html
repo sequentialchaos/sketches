@@ -6,7 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Rainboku 0</title>
   <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="/sketches/lib/hex.js"></script>
+  <script src="/sketches/lib/hex.js?1"></script>
   <style type="text/css">
     html, body {
       margin: 0;
@@ -48,24 +48,32 @@
     let origin = new Point(0, 0)
     let grid = new Grid(POINTY, size, origin)
 
+    let fractionHex = new Hex(1.8, -2.4)
+    console.log(fractionHex)
+    console.log(fractionHex.round())
     console.log(hex)
     console.log(grid)
     console.log(hex.svgPath(grid))
 
-    hex.draw(svg, grid, hexOptions)
-    for (let i = 0; i < 6; i++) {
-      //hex.neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor((i+1) % 6).draw(svg, grid, hexOptions)
-      
-      //hex.neighbor(i).neighbor((i+1) % 6).neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor(i).neighbor(i).neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).draw(svg, grid, hexOptions)
-
-      hex.neighbor(i).neighbor(i).neighbor(i).neighbor(i).neighbor(i).neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).draw(svg, grid, hexOptions)
-    }
+    let layout = new Layout(grid) 
+    layout.addNew(0, 0)
+    layout.surround(0, 0)
+    layout.addNew(3, 1)
+    layout.drawOnSVG()
     
+    console.log(layout.getSegment(new Hex(0, 0), 0))
+    console.log(layout)
+
+    svg.on("click", () => {
+      let click = d3.mouse(d3.event.currentTarget)
+      let p = new Point(click[0], click[1])
+      let h = new Hex().fromPixel(grid, p)
+      layout.add(h)
+      layout.drawOnSVG()
+      console.log(h)
+      console.log(layout)
+    })
+
     </script>
 </body>
 </html>
