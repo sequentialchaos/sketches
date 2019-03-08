@@ -6,7 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Rainboku 0</title>
   <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="/sketches/lib/hex.js?1"></script>
+  <script src="/sketches/lib/FileSaver.js"></script>
+  <script src="/sketches/lib/hex.js"></script>
   <style type="text/css">
     html, body {
       margin: 0;
@@ -21,12 +22,43 @@
     let w = window.innerWidth,
         h = window.innerHeight;
 
+    let saveButton = d3.select("body")
+      .append("button")
+        .text("Save")
+        .style("top", Math.round(h * 0.01) + "px")
+        .style("left", Math.round(w * 0.01) + "px")
+        .style("position", "absolute")
+        .style("width", "100px")
+        .style("height", "40px")
+        .style("font-size", "30px")
+        .style("font-weight", "bold")
+    
+    let loadButton = d3.select("body")
+      .append("button")
+        .text("Load")
+        .style("top", Math.round(h * 0.01) + "px")
+        .style("left", Math.round(w * 0.02 + 100) + "px")
+        .style("position", "absolute")
+        .style("width", "100px")
+        .style("height", "40px")
+        .style("font-size", "30px")
+        .style("font-weight", "bold")
+
+    let loadInput = d3.select("body")
+      .append("input")
+        .attr("type", "file")
+        .attr("id", "file-input")
+        .attr("name", "layout")
+        .style("display", "none")
+
+    
+
     let svg = d3.select("body")
       .append("svg")
         .attr("width", w)
         .attr("height", h)
         .attr("viewBox", [(-w/2), (-h/2), w, h].join(" ")) // center at (0, 0)
-        .attr("transform", "scale(1, -1)"); // flip y
+        // .attr("transform", "scale(1, -1)"); // flip y
 
     // background
     svg.append("rect")
@@ -34,7 +66,7 @@
         .attr("y", (-h/2))
         .attr("width", w)
         .attr("height", h)
-        .attr("fill", "black");
+        .attr("fill", "white");
 
     let hexOptions = {
       fill: "white",
@@ -42,27 +74,26 @@
       stroke: "black", 
       "stroke-width": "4px"
     }
-    let r = 50
+    let r = 60
     let hex = new Hex(0, 0)
-    let size = new Point(r, r)
+    let size = new Point(r, -r)
     let origin = new Point(0, 0)
     let grid = new Grid(POINTY, size, origin)
 
     let fractionHex = new Hex(1.8, -2.4)
-    console.log(fractionHex)
-    console.log(fractionHex.round())
-    console.log(hex)
-    console.log(grid)
-    console.log(hex.svgPath(grid))
 
-    let layout = new Layout(grid) 
-    layout.addNew(0, 0)
-    layout.surround(0, 0)
-    layout.addNew(3, 1)
+    let layout = new Layout(grid, "0,0\n0,1") 
+    // layout.addNew(0, 0)
     layout.drawOnSVG()
-    
-    console.log(layout.getSegment(new Hex(0, 0), 0))
-    console.log(layout)
+
+    d3.selectAll(".hexagon") 
+      .on("click", () => {
+        let hex = d3.select(this)
+        console.log(hex)
+        let id = hex.attr("id")
+        hex.attr("fill", "cyan")
+        layout.drawOnSVG()
+      })
 
     svg.on("click", () => {
       let click = d3.mouse(d3.event.currentTarget)
@@ -71,9 +102,17 @@
       layout.add(h)
       layout.drawOnSVG()
       console.log(h)
+      console.log(layout.toString())
       console.log(layout)
     })
 
+    saveButton.on("click", () => {
+      layout.save()
+    })
+
+    loadButton.on("click", () => {
+
+    })
     </script>
 </body>
 </html>
