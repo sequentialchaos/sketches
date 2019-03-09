@@ -6,6 +6,7 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Rainboku 0</title>
   <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://unpkg.com/d3-simple-slider"></script>
   <script src="/sketches/lib/FileSaver.js"></script>
   <script src="/sketches/lib/hex.js"></script>
   <style type="text/css">
@@ -32,6 +33,9 @@
         .style("height", "40px")
         .style("font-size", "30px")
         .style("font-weight", "bold")
+        .style("-webkit-user-select", "none")
+        .style("-moz-user-select", "none")
+        .style("-ms-user-select", "none")
     
     let loadButton = d3.select("body")
       .append("button")
@@ -43,6 +47,9 @@
         .style("height", "40px")
         .style("font-size", "30px")
         .style("font-weight", "bold")
+        .style("-webkit-user-select", "none")
+        .style("-moz-user-select", "none")
+        .style("-ms-user-select", "none")
 
     let loadInput = d3.select("body")
       .append("input")
@@ -51,7 +58,38 @@
         .attr("name", "layout")
         .style("display", "none")
 
+    // let sizeSlider = d3.sliderBottom()
+    //   .min(10)
+    //   .max(120)
+    //   .step(1)
+    //   .width(200)
+    //   .ticks(10)
+    //   .fill("cyan")
     
+    let sizeSlider = d3.select("body")
+      .append("input")
+        .attr("type", "range")
+        .attr("min", 10)
+        .attr("max", 120)
+        .attr("step", 1)
+        .attr("value", 40)
+        .style("top", Math.round(h * 0.01) + "px")
+        .style("left", Math.round(w * 0.02 + 100 + 120) + "px")
+        .style("position", "absolute")
+        .style("color", "red")
+
+    let originInput = d3.select("body")
+      .append("input")
+        .attr("id", "origin-input")
+        .attr("type", "text")
+        .style("top", Math.round(h * 0.01) + "px")
+        .style("left", Math.round(w * 0.02 + 100 + 120 + 200) + "px")
+        .style("width", "100px")
+        .style("position", "absolute")
+        .style("font-size", "30px")
+
+    let originButton = d3.select("body")
+      .append()
 
     let svg = d3.select("body")
       .append("svg")
@@ -74,7 +112,7 @@
       stroke: "black", 
       "stroke-width": "4px"
     }
-    let r = 60
+    let r = +sizeSlider.attr("value")
     let hex = new Hex(0, 0)
     let size = new Point(r, -r)
     let origin = new Point(0, 0)
@@ -99,7 +137,11 @@
       let click = d3.mouse(d3.event.currentTarget)
       let p = new Point(click[0], click[1])
       let h = new Hex().fromPixel(grid, p)
-      layout.add(h)
+      if (layout.contains(h)) {
+        layout.remove(h)
+      } else {
+        layout.add(h)
+      }
       layout.drawOnSVG()
       console.log(h)
       console.log(layout.toString())
@@ -112,6 +154,16 @@
 
     loadButton.on("click", () => {
 
+    })
+
+    sizeSlider.on("change", value => {
+      r = sizeSlider.property("value")
+      console.log(r)
+      size = new Point(r, -r)
+      grid = new Grid(POINTY, size, origin)
+      
+      layout = new Layout(grid, from=layout.toString())
+      layout.drawOnSVG()
     })
     </script>
 </body>
