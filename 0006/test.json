@@ -5,10 +5,10 @@
       "name": "Leagues",
       "children": [
         {
-          "name": "American League"
+          "name": "American League", "value": 15
         },
         {
-          "name": "National League"
+          "name": "National League", "value": 15
         }
       ]
     }
