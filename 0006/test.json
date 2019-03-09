@@ -1,0 +1,16 @@
+{
+  "name": "Major League Baseball",
+  "children": [
+    {
+      "name": "Leagues",
+      "children": [
+        {
+          "name": "American League"
+        },
+        {
+          "name": "National League"
+        }
+      ]
+    }
+  ]
+}

@@ -200,7 +200,7 @@
       textSize(30);
       textStyle(BOLD);
       textFont('Calibri');
-      text(setPartitionToString(partition), side * 0.015, side * 0.985);
+      text(partition.toString(), side * 0.015, side * 0.985);
     }
 
     function drawCount() {
@@ -224,7 +224,7 @@
     function getPartitions(N) {
       // Get all set partitions of {0, 1, ..., N-1}
       partitions = [];
-      for (let partition of setPartitions(N))
+      for (let partition of new setPartitions(N).all())
         partitions.push(partition);
       return partitions;
     }
