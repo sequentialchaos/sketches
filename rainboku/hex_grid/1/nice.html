@@ -26,7 +26,7 @@
         .attr("width", w)
         .attr("height", h)
         .attr("viewBox", [(-w/2), (-h/2), w, h].join(" ")) // center at (0, 0)
-        .attr("transform", "scale(1, -1)"); // flip y
+        // .attr("transform", "scale(1, -1)"); // flip y
 
     // background
     svg.append("rect")
@@ -52,18 +52,18 @@
     console.log(grid)
     console.log(hex.svgPath(grid))
 
-    hex.draw(svg, grid, hexOptions)
+    hex.drawOnSVG(svg, grid)
     for (let i = 0; i < 6; i++) {
       //hex.neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor((i+1) % 6).draw(svg, grid, hexOptions)
+      hex.neighbor(i).neighbor(i).drawOnSVG(svg, grid, hexOptions)
+      hex.neighbor(i).neighbor((i+1) % 6).drawOnSVG(svg, grid, hexOptions)
       
       //hex.neighbor(i).neighbor((i+1) % 6).neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor(i).neighbor(i).neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).draw(svg, grid, hexOptions)
+      hex.neighbor(i).neighbor(i).neighbor(i).neighbor(i).drawOnSVG(svg, grid, hexOptions)
+      hex.neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).drawOnSVG(svg, grid, hexOptions)
 
-      hex.neighbor(i).neighbor(i).neighbor(i).neighbor(i).neighbor(i).neighbor(i).draw(svg, grid, hexOptions)
-      hex.neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).draw(svg, grid, hexOptions)
+      hex.neighbor(i).neighbor(i).neighbor(i).neighbor(i).neighbor(i).neighbor(i).drawOnSVG(svg, grid, hexOptions)
+      hex.neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).neighbor(i).neighbor((i+1) % 6).drawOnSVG(svg, grid, hexOptions)
     }
     
     </script>
