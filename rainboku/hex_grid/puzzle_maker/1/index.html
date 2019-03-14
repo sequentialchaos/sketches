@@ -9,7 +9,7 @@
   <script src="https://d3js.org/d3.v5.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue"></script>
   <script src="/sketches/lib/FileSaver.js"></script>
-  <script src="/sketches/lib/hex.js?1"></script>
+  <script src="/sketches/lib/hex.js"></script>
   <style type="text/css">
     html,
     body {
@@ -60,6 +60,12 @@
     .slider {
       width: 86.58%;
     }
+
+    .label {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+    }
   </style>
 </head>
 
@@ -68,9 +74,7 @@
     <div id="save-load-clear"></div>
     <div id="size"></div>
     <div id="types">
-      <svg height="30">
-        <rect id="-1" width="10%" height="100%" fill="black"></rect>
-      </svg>
+      <svg height="30"></svg>
     </div>
   </div>
   <div id="grid">
@@ -131,16 +135,45 @@
       let hex = new Hex(0, 0)
 
       let colors = hex.colors
+      let selectedType = 0
       const createPalette = (svg, colors) => {
+        let svgWidth = +svg.style("width").split("p")[0];
+        let svgHeight = +svg.style("height").split("p")[0];
+        console.log(svgWidth)
         colors.forEach((color, i) => {
           let width = 100 / colors.length
           let x = width * i
-          let rect = svg.append("rect")
-              .attr("id", i-1)
+          let g = svg.append("g")
+          let rect = g.append("rect")
+              .attr("class", i-1)
               .attr("fill", color)
               .attr("width", width + "%")
               .attr("height", "100%")
               .attr("x", x + "%")
+              .style("cursor", "pointer")
+              .on("click", () => {
+                selectedType = i-1
+                console.log(selectedType)
+              })
+            
+          x = svgWidth / colors.length * i + svgWidth / colors.length / 2
+          let y = svgHeight / 2 + 2
+          console.log(x)
+          let text = g.append("text")
+              .attr("class", i-1)
+              .attr("x", x + "px")
+              .attr("y", y + "px")
+              .text(i > 1 ? i-1 : "")
+              .style("cursor", "pointer")
+              .style("font-size", "28px")
+              .style("fill", "black")
+              .style("text-anchor", "middle")
+              .style("alignment-baseline", "middle")
+              // .style("z-index", -1)
+              .on("click", () => {
+                selectedType = i-1
+                console.log(selectedType)
+              })
         })
       }
       let colorPalette = d3.select("#types > svg")
@@ -169,6 +202,7 @@
         let click = d3.mouse(d3.event.currentTarget)
         let p = new Point(click[0], click[1])
         let h = new Hex().fromPixel(grid, p)
+        h.setType(selectedType)
         if (puzzle.contains(h)) {
           puzzle.remove(h)
         } else {
