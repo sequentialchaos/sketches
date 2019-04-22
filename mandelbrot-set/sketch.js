@@ -47,8 +47,3 @@ function setup() {
   }
   updatePixels()
 }
-
-// function draw() {
-//   background(40)
-
-// }
