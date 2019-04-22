@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title></title>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.7.3/p5.js"></script>
+  <script src="../../lib/p5.dom.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<style>
+  input {
+    display: grid;
+  }
+</style>
+<body>
+  <label for="input">Circle size: </label>
+  <input type="range" min="0" max="70" step="1" id="settings" v-model="padding"></input>
+  <script type="text/javascript">
+    var settings = new Vue({
+      el: "#settings",
+      data: {
+        padding: 7
+      }
+    })
+  </script>
+
+  <script type="text/javascript">
+    let width, height;
+    let rows, columns;
+    let r,g,b;
+    let canvas;
+
+    function setup() {
+      width = 700;
+      height = 700;
+
+      rows = 10;
+      columns = 10;
+
+      createCanvas(width, height);
+      setColor();
+    }
+
+    function draw() {
+      background(180);
+      drawCircles();
+    }
+
+    function setColor() {
+      r = random(256);
+      g = random(256);
+      b = random(256);
+    }
+
+    function mouseClicked() {
+      return false;
+    }
+
+
+
+    function drawCircles() {
+      let padding = 9;
+      let diameter = width / columns;
+      let radius = diameter / 2;
+      for (let x = radius; x < width; x += diameter) {
+        for (let y = radius; y < height; y += diameter) {
+          fill(r,g,b);
+          ellipse(x, y, diameter - settings.padding, diameter - settings.padding);
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>
