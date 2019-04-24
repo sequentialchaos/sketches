@@ -38,10 +38,6 @@ function draw() {
     
     let n = 2*i + 1
     let radius = r * r1(n)
-    // if (i % 2 == 0) {
-    //   n = i + 1
-    //   radius = r * r2(n)
-    // }
 
     sliderLabel(maxSlider)
 
@@ -64,6 +60,9 @@ function draw() {
   stroke(0)
   strokeWeight(2)
   line(x - d*1.20, y, 0, wave[0])
+  fill('blue')
+  stroke('blue')
+  circle(x - d*1.20, y, 4)
   pop()
 
   push()
