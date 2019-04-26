@@ -10,7 +10,7 @@ function setup() {
 
 
 function drawStuff(cx, cy, r, ratio, i=0) {
-  fill(0, map(i, 0, 7, 0, 255), 175)
+  fill(70, map(i, 0, 7, 0, 255), 175)
   if (i % 2 == 0) {
     let square = new RegularPolygon({cx:cx, cy:cy, n:4, r:r})
     square.draw(false)
