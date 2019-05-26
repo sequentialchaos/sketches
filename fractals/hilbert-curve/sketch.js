@@ -10,7 +10,12 @@ let instructions = axiom
 
 function setup() {
   const length = min(innerWidth, innerHeight)
-  createCanvas(length, length).center('horizontal')
+  if (length == innerWidth) {
+    createCanvas(length, length * 3/2).center('horizontal')
+  } else {
+    createCanvas(length * 3/2, length).center('horizontal')
+  }
+  
 
   noLoop()
 
@@ -27,19 +32,20 @@ function setup() {
   // translate(width * 0.025, height * 0.975)
   // strokeWeight(map(num_iterations, 1, 9, 10, 1))
   // rainbowTurtleRemix(instructions, width / (pow(2, num_iterations) - 1) * 0.95, 90)
-  let c = 1/4
+  
   // drawHilbertRainbowRemix(4, 0, 0, width/2, height/2, 0.025, c)
   // drawHilbertRainbowRemix(5, width/2, 0, width/2, height/2, 0.025, c)
   // drawHilbertRainbowRemix(6, 0, height/2, width/2, height/2, 0.025, c)
   // drawHilbertRainbowRemix(7, width/2, height/2, width/2, height/2, 0.025, c)
+  let c = 2
   let d = 3
   let count = 1
-  for (let i = 0; i < d; i++) {
+  for (let i = 0; i < c; i++) {
     for (let j = 0; j < d; j++) {
       let x = j * width / d,
-          y = i * height / d;
+          y = i * height / c;
       // drawHilbertRainbowRemix(count, x, y, width/d, height/d, 0.05, 1/d)
-      drawHilbertRainbow(count, x, y, width/d, height/d, 0.05)
+      drawHilbertRainbow(count, x, y, width/d, height/c, 0.05)
       count++
     }
   }
