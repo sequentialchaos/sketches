@@ -1,5 +1,4 @@
-let j = 0
-let num_iterations = 8
+let c, d;
 let axiom = 'L'
 let rules = {
   L: '+RF-LFL-FR+',
@@ -11,9 +10,13 @@ let instructions = axiom
 function setup() {
   const length = min(innerWidth, innerHeight)
   if (length == innerWidth) {
-    createCanvas(length, length * 3/2).center('horizontal')
+    createCanvas(length * 2/3, length).center('horizontal')
+    c = 3
+    d = 2
   } else {
-    createCanvas(length * 3/2, length).center('horizontal')
+    createCanvas(length, length * 2/3).center('horizontal')
+    c = 2
+    d = 3
   }
   
 
@@ -37,15 +40,14 @@ function setup() {
   // drawHilbertRainbowRemix(5, width/2, 0, width/2, height/2, 0.025, c)
   // drawHilbertRainbowRemix(6, 0, height/2, width/2, height/2, 0.025, c)
   // drawHilbertRainbowRemix(7, width/2, height/2, width/2, height/2, 0.025, c)
-  let c = 2
-  let d = 3
+
   let count = 1
   for (let i = 0; i < c; i++) {
     for (let j = 0; j < d; j++) {
       let x = j * width / d,
           y = i * height / c;
       // drawHilbertRainbowRemix(count, x, y, width/d, height/d, 0.05, 1/d)
-      drawHilbertRainbow(count, x, y, width/d, height/c, 0.05)
+      drawHilbertRainbow(count, x, y, width/d, height/c, 0.08)
       count++
     }
   }
