@@ -26,7 +26,7 @@ function setup() {
 }
 
 
-function mousePressed() {
+function mouseClicked() {
   hilbert.getNextInstructions()
   clickCount++
 }

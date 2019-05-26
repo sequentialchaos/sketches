@@ -35,18 +35,18 @@ function draw() {
   prev_x = x
   prev_y = y
   
-  // push()
-  // rotate(PI/2)
-  // translate(width * 0.4, height * 0.4)
-  // fill(20, 120, 120)
-  // noStroke()
-  // const w = 80
-  // rect(0, 0, w, w)
-  // fill(255)
-  // textSize(36)
-  // textAlign(CENTER, CENTER)
-  // text(Math.round(u * 100) / 100 , w/2, w/2)
-  // pop()
+  push()
+  rotate(PI/2)
+  translate(width * 0.4, height * 0.4)
+  fill(20, 120, 120)
+  noStroke()
+  const w = 80
+  rect(0, 0, w, w)
+  fill(255)
+  textSize(36)
+  textAlign(CENTER, CENTER)
+  text(Math.round(u * 100) / 100 , w/2, w/2)
+  pop()
 
 
 
