@@ -1,38 +1,53 @@
+
+let color_mode = 'rainbow'
+
+
 function setup() {
-  length = min(innerWidth, innerHeight)
+  width_ratio = 0.7
+  createCanvas(innerWidth * width_ratio, innerHeight)
+  // frameRate(10)
+  noLoop()
+  offset = createVector(0, 0)
+  poffset = createVector(0, 0)
 
-  createCanvas(length, length)
-  frameRate(10)
 
-  createP('angle:')
+  left_width = innerWidth - width
+  slider_width_ratio = 0.9
+
+  angle_display = createP('angle:')
   angle = createSlider(0, 360, 36, 0.01)
-  angle.size(innerWidth - length, 20)
   angle.input(angleChanges)
-  angle_display = createP()
 
-  createP('length (pixels):')
-  length = createSlider(0, 150, 30, 1)
+  length_display = createP('step length:')
+  length = createSlider(0, height * 0.6, 30, 1)
   length.input(lengthChanges)
-  length_display = createP()
 
-  createP('# of iterations:')
+  iterations_display = createP('# of iterations:')
   iterations = createSlider(0, 5, 2, 1)
   iterations.input(iterationsChange)
-  iterations_display = createP()
 
-  createP('AXIOM')
-  axiom = createInput('[B]++[B]++[B]++[B]++[B]')
-  rule_string = `
-  A: CF++DF----BF[-CF----AF]++
+  createP('Axiom').style('font-weight', 'bold')
+  axiom = createElement('textarea').size(left_width * 0.4, 35)
+  axiom.elt.innerHTML = '[B]++[B]++[B]++[B]++[B]'
+  rule_string = `A: CF++DF----BF[-CF----AF]++
   B: +CF--DF[---AF--BF]+
   C: -AF++BF[+++CF++DF]-
   D: --CF++++AF[+DF++++BF]--BF
   F: 
-  `
+`.replace(/ /g,'')
 
-  createP('RULES')
-  rules = createElement('textarea').size(400, 100)
+  createP('Rules').style('font-weight', 'bold')
+  rules = createElement('textarea')
   rules.elt.innerHTML = rule_string
+
+  setSizes()
+  
+  createP()
+  color_select = createSelect()
+  color_select.option('rainbow')
+  color_select.option('rainbow remix')
+  color_select.option('white')
+  color_select.changed(colorChanged)
 
   createP()
   button = createButton("Export HPGL")
@@ -54,13 +69,56 @@ function setup() {
   createP()
 
   rules.input(rulesChange)
+
+
+  
+  smooth()
 }
 
 function draw() {
   background(0)
 
+  push()
   translate(width/2, height/2)
-  l_system.draw({len:length.value(), colormode:'rainbow remix', colors_ratio:1/10})
+  translate(offset.x, offset.y)
+  if (color_mode == 'white') {
+    stroke('white')
+    l_system.draw({len:length.value(), mode: 'absolute', colormode:'normal'})
+  } else {
+    l_system.draw({len:length.value(), mode: 'absolute', colormode:color_mode, colors_ratio:1/10})
+  }
+  print(l_system.turtle.lines)
+  // print(l_system)
+  print(calculateCenterPoint(l_system.turtle.lines))
+
+  pop()
+}
+
+function mousePressed() {
+  mouse = createVector(mouseX, mouseY)
+  // print(poffset)
+  poffset.set(offset)
+}
+
+function mouseDragged() {
+  offset.x = mouseX - mouse.x + poffset.x
+  offset.y = mouseY - mouse.y + poffset.y
+  redraw()
+}
+
+function windowResized() {
+  resizeCanvas(innerWidth * width_ratio, innerHeight)
+  setSizes()
+
+}
+
+function setSizes() {
+  left_width = innerWidth - width
+  angle.size(left_width * slider_width_ratio, 20)
+  length.size(left_width * slider_width_ratio, 20)
+  iterations.size(left_width * slider_width_ratio, 20)
+  axiom.size(left_width * slider_width_ratio, 35)
+  rules.size(left_width * slider_width_ratio, 100)
 }
 
 function parseRules(rule_string) {
@@ -69,10 +127,8 @@ function parseRules(rule_string) {
   for (let unparsed_rule of unparsed_rules) {
     if (unparsed_rule.trim() !== '' ) {
       if (!isRuleValid(unparsed_rule)) {
-        createP('NO')
         break
       }
-      createP('YES')
       parts = unparsed_rule.split(":")
       name = parts[0].trim()
       rule = parts[1].trim()
@@ -83,31 +139,39 @@ function parseRules(rule_string) {
 }
 
 function angleChanges() {
-  angle_display.elt.innerHTML = angle.value()
+  angle_display.elt.innerHTML = `angle Δ: ${angle.value()}°`
   l_system.angle = angle.value()
-  print(l_system)
+  redraw()
+  // print(l_system)
 }
 
 function lengthChanges() {
-  length_display.elt.innerHTML = length.value()
+  length_display.elt.innerHTML = `step length: ${length.value()} px`
+  redraw()
 }
 
 function iterationsChange() {
-  iterations_display.elt.innerHTML = iterations.value()
+  iterations_display.elt.innerHTML = `# of iterations: ${iterations.value()}`
   l_system.iterations = 0
   l_system.instructions = axiom.value()
   for(let i=0; i<iterations.value(); i++) {
     l_system.getNextInstructions()
   }
+  redraw()
 }
-
 
 
 function axiomChanges() {
   let new_axiom = axiom.value()
   if (isAxiomValid(new_axiom)) {
     l_system.axiom = new_axiom
+    l_system.iterations = 0
+    l_system.instructions = new_axiom
+    for(let i=0; i<iterations.value(); i++) {
+      l_system.getNextInstructions()
+    }
   }
+  redraw()
 }
 
 function rulesChange() {
@@ -118,15 +182,21 @@ function rulesChange() {
   for(let i=0; i<iterations.value(); i++) {
     l_system.getNextInstructions()
   }
+  redraw()
+}
+
+function colorChanged() {
+  color_mode = color_select.value()
+  redraw()
 }
 
 function buttonMousePressed() {
-  let plot_txt = formatForPlotter(l_system.turtle.lines, width, 0, 0)
+  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, width)
   download(`hpgl_${axiom.value()}.${random(0, 20000)}.txt`, plot_txt)
 
 
-  console.log("hi")
-  print(l_system.turtle)
+  // console.log("hi")
+  // print(l_system.turtle)
 }
 
 function isRuleValid(rule_string) {
