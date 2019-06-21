@@ -14,6 +14,8 @@ function setup() {
   left_width = innerWidth - width
   slider_width_ratio = 0.9
 
+  createP('L-Systems Editor').style('font-weight', 'bold')
+
   angle_display = createP('angle:')
   angle = createSlider(0, 360, 36, 0.01)
   angle.input(angleChanges)
