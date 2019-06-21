@@ -190,7 +190,7 @@ function colorChanged() {
 function buttonMousePressed() {
   let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, width)
   let words = ['cow', 'butter', 'peanut', 'cat', 'pillow', 'oven', 'meerkat', 'eskimo', 'hope', 'joy', 'oolong', 'sunset', 'stop', 'tree', 'plant', 'alpaca', 'cupcake', 'veggie', 'booksmart', 'dijsktra', 'sammet', 'hopper', 'waffle', 'puma', 'backpack', 'park', 'bridge', ]
-  download(`hpgl_${random(words)}_${int(random(0, 20000))}.txt`, plot_txt)
+  download(`${random(words)}_${int(random(0, 20000))}_hpgl.txt`, plot_txt)
 
 
   // console.log("hi")
