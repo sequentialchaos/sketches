@@ -89,16 +89,12 @@ function draw() {
   } else {
     l_system.draw({len:length.value(), mode: 'absolute', colormode:color_mode, colors_ratio:1/10})
   }
-  print(l_system.turtle.lines)
-  // print(l_system)
-  print(calculateCenterPoint(l_system.turtle.lines))
 
   pop()
 }
 
 function mousePressed() {
   mouse = createVector(mouseX, mouseY)
-  // print(poffset)
   poffset.set(offset)
 }
 
@@ -144,7 +140,6 @@ function angleChanges() {
   angle_display.elt.innerHTML = `angle Δ: ${angle.value()}°`
   l_system.angle = angle.value()
   redraw()
-  // print(l_system)
 }
 
 function lengthChanges() {
@@ -194,11 +189,10 @@ function colorChanged() {
 
 function buttonMousePressed() {
   let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, width)
-  download(`hpgl_${axiom.value()}.${random(0, 20000)}.txt`, plot_txt)
+  download(`hpgl_${int(random(0, 20000))}.txt`, plot_txt)
 
 
   // console.log("hi")
-  // print(l_system.turtle)
 }
 
 function isRuleValid(rule_string) {
