@@ -3,28 +3,17 @@
 function setup() {
   width_ratio = 0.7
   createCanvas(innerWidth * width_ratio, innerHeight, P2D).mouseMoved(panCanvas)
-  // frameRate(10)
   noLoop()
+
   offset = createVector(0, 0)
   poffset = createVector(0, 0)
-
 
   left_width = innerWidth - width
   slider_width_ratio = 0.9
 
-  createP('L-Systems Editor').style('font-weight', 'bold')
+  title = createP('L-Systems Editor').style('font-weight', 'bold').style('font-size', '24px')
 
-  angle_display = createP('angle:')
-  angle = createSlider(0, 360, 36, 0.01)
-  angle.input(angleChanges)
 
-  length_display = createP('step length:')
-  length = createSlider(0, height * 0.6, 30, 1)
-  length.input(lengthChanges)
-
-  iterations_display = createP('# of iterations:')
-  iterations = createSlider(0, 10, 2, 1)
-  iterations.input(iterationsChange)
 
   createP('Axiom').style('font-weight', 'bold')
   axiom = createElement('textarea').size(left_width * 0.4, 35)
@@ -40,6 +29,22 @@ function setup() {
   rules = createElement('textarea')
   rules.elt.innerHTML = rule_string
 
+  angle_div = createDiv()
+  angle_display = createP('angle:')
+  angle = createSlider(0, 360, 36, 0.01)
+  angle.input(angleChanges)
+  angle_div.child(angle_display)
+  angle_div.child(angle)
+
+  length_display = createP('step length:')
+  length = createSlider(0, height * 0.6, 30, 1)
+  length.input(lengthChanges)
+
+  iterations_display = createP('# of iterations:')
+  iterations = createSlider(0, 10, 2, 1)
+  iterations.input(iterationsChange)
+
+
   setSizes()
   
   createP()
@@ -53,8 +58,9 @@ function setup() {
   color_select.changed(colorChanged)
 
   createP()
-  button = createButton("Export HPGL")
-  button.mousePressed(buttonMousePressed)
+  export_HPGL_button = createButton("Export HPGL")
+  export_HPGL_button.mousePressed(export_hpgl_button_pressed)
+
 
   l_system = new L_system(
     axiom.value(),
@@ -72,8 +78,6 @@ function setup() {
   createP()
 
   rules.input(rulesChange)
-
-
   
   smooth()
 }
@@ -93,7 +97,6 @@ function draw() {
   } else {
     l_system.draw({len:length.value(), mode: 'absolute', colormode:color_mode, colors_ratio:1/10})
   }
-
   pop()
 }
 
@@ -101,10 +104,6 @@ function mousePressed() {
   mouse = createVector(mouseX, mouseY)
   poffset.set(offset)
 }
-
-// function mouseDragged() {
-
-// }
 
 function panCanvas() {
   if (mouseIsPressed) {
@@ -117,7 +116,6 @@ function panCanvas() {
 function windowResized() {
   resizeCanvas(innerWidth * width_ratio, innerHeight)
   setSizes()
-
 }
 
 function setSizes() {
@@ -200,21 +198,23 @@ function colorChanged() {
   redraw()
 }
 
-function buttonMousePressed() {
-  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, min(width, height))
-  let words = ['cow', 'butter', 'peanut', 'cat', 'pillow', 'oven', 'meerkat', 'eskimo', 'hope', 'joy', 'oolong', 'sunset', 'stop', 'tree', 'plant', 'alpaca', 'cupcake', 'veggie', 'booksmart', 'dijsktra', 'sammet', 'hopper', 'waffle', 'puma', 'backpack', 'park', 'bridge', ]
-  download(`${int(random(0, 20000))}_${random(words)}s_hpgl.txt`, plot_txt)
+function export_hpgl_button_pressed() {
+  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, max(width, height))
+  let words = ['cow', 'butter', 'peanut', 'cat', 'pillow', 'oven', 'meerkat', 'eskimo', 'hope', 'joy', 'oolong', 'sunset', 'stop', 'tree', 'plant', 'alpaca', 'cupcake', 'veggie', 'booksmart', 'dijsktra', 'sammet', 'hopper', 'waffle', 'puma', 'backpack', 'park', 'bridge', 'goat', 'book', 'couche', 'pear', 'pair']
+  download(`${int(random(0, 20000))}_${random(words)}s_hpgl`, plot_txt)
 
 
   // console.log("hi")
 }
 
+
+
 function isRuleValid(rule_string) {
-  return /^\s*[A-Z]\s*:\s*[A-Zf\+\-\[\]]*\s*$/.test(rule_string)
+  return /^\s*[A-Zf]\s*:\s*[A-Zf\+\-\[\]]*\s*$/.test(rule_string)
 }
 
-function isAxiomValid(rule_string) {
-  return /\s*[A-Zf\+\-\[\]]*\s*$/.test(rule_string)
+function isAxiomValid(axiom_string) {
+  return /^\s*[A-Zf\+\-\[\]]*\s*$/.test(axiom_string)
 }
 
 
