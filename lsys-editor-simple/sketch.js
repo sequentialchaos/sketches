@@ -1,10 +1,8 @@
 
-let color_mode = 'rainbow'
-
 
 function setup() {
   width_ratio = 0.7
-  createCanvas(innerWidth * width_ratio, innerHeight)
+  createCanvas(innerWidth * width_ratio, innerHeight, P2D).mouseMoved(panCanvas)
   // frameRate(10)
   noLoop()
   offset = createVector(0, 0)
@@ -25,7 +23,7 @@ function setup() {
   length.input(lengthChanges)
 
   iterations_display = createP('# of iterations:')
-  iterations = createSlider(0, 5, 2, 1)
+  iterations = createSlider(0, 10, 2, 1)
   iterations.input(iterationsChange)
 
   createP('Axiom').style('font-weight', 'bold')
@@ -45,10 +43,13 @@ function setup() {
   setSizes()
   
   createP()
+  picked_color = 'none'
+  color_mode = 'rainbow'
   color_select = createSelect()
   color_select.option('rainbow')
   color_select.option('rainbow remix')
   color_select.option('white')
+  color_select.option('pick a color')
   color_select.changed(colorChanged)
 
   createP()
@@ -86,6 +87,9 @@ function draw() {
   if (color_mode == 'white') {
     stroke('white')
     l_system.draw({len:length.value(), mode: 'absolute', colormode:'normal'})
+  } else if (color_mode == 'pick a color') {
+    stroke(picked_color)
+    l_system.draw({len:length.value(), mode: 'absolute', colormode:'normal'})
   } else {
     l_system.draw({len:length.value(), mode: 'absolute', colormode:color_mode, colors_ratio:1/10})
   }
@@ -98,10 +102,16 @@ function mousePressed() {
   poffset.set(offset)
 }
 
-function mouseDragged() {
-  offset.x = mouseX - mouse.x + poffset.x
-  offset.y = mouseY - mouse.y + poffset.y
-  redraw()
+// function mouseDragged() {
+
+// }
+
+function panCanvas() {
+  if (mouseIsPressed) {
+    offset.x = mouseX - mouse.x + poffset.x
+    offset.y = mouseY - mouse.y + poffset.y
+    redraw()
+  }
 }
 
 function windowResized() {
@@ -184,13 +194,16 @@ function rulesChange() {
 
 function colorChanged() {
   color_mode = color_select.value()
+  if (color_mode == 'pick a color') {
+    
+  }
   redraw()
 }
 
 function buttonMousePressed() {
-  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, width)
+  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, min(width, height))
   let words = ['cow', 'butter', 'peanut', 'cat', 'pillow', 'oven', 'meerkat', 'eskimo', 'hope', 'joy', 'oolong', 'sunset', 'stop', 'tree', 'plant', 'alpaca', 'cupcake', 'veggie', 'booksmart', 'dijsktra', 'sammet', 'hopper', 'waffle', 'puma', 'backpack', 'park', 'bridge', ]
-  download(`${random(words)}_${int(random(0, 20000))}_hpgl.txt`, plot_txt)
+  download(`${int(random(0, 20000))}_${random(words)}s_hpgl.txt`, plot_txt)
 
 
   // console.log("hi")
