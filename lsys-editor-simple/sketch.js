@@ -1,7 +1,7 @@
 
 
 function setup() {
-  width_ratio = 0.7
+  width_ratio = 0.75
   createCanvas(innerWidth * width_ratio, innerHeight, P2D).mouseMoved(panCanvas)
   noLoop()
 
@@ -13,22 +13,30 @@ function setup() {
 
   title = createP('L-Systems Editor').style('font-weight', 'bold').style('font-size', '24px')
 
-
+  first = l_systems[0]
+  l_system = new L_system(
+    first.axiom,
+    first.rules,
+    first.len,
+    first.angle,
+    first.max_iterations,
+    first.len_ratio
+  )
 
   createP('Axiom').style('font-weight', 'bold')
   axiom = createElement('textarea').size(left_width * 0.4, 35)
-  axiom.elt.innerHTML = '[B]++[B]++[B]++[B]++[B]'
-  rule_string = `A: CF++DF----BF[-CF----AF]++
-  B: +CF--DF[---AF--BF]+
-  C: -AF++BF[+++CF++DF]-
-  D: --CF++++AF[+DF++++BF]--BF
-  F: 
-`.replace(/ /g,'')
+//   axiom.elt.innerHTML = '[B]++[B]++[B]++[B]++[B]'
+//   rule_string = `A: CF++DF----BF[-CF----AF]++
+//   B: +CF--DF[---AF--BF]+
+//   C: -AF++BF[+++CF++DF]-
+//   D: --CF++++AF[+DF++++BF]--BF
+//   F: 
+// `.replace(/ /g,'')
 
   createP('Rules').style('font-weight', 'bold')
   rules = createElement('textarea')
-  rules.elt.innerHTML = rule_string
-
+  // rules.elt.innerHTML = rule_string
+  
   angle_div = createDiv()
   angle_display = createP('angle:')
   angle = createSlider(0, 360, 36, 0.01)
@@ -44,7 +52,7 @@ function setup() {
   iterations = createSlider(0, 10, 2, 1)
   iterations.input(iterationsChange)
 
-
+  setValues()
   setSizes()
   
   createP()
@@ -62,13 +70,8 @@ function setup() {
   export_HPGL_button.mousePressed(export_hpgl_button_pressed)
 
 
-  l_system = new L_system(
-    axiom.value(),
-    parseRules(rules.value()),
-    10,
-    angle.value(),
-    10
-  )
+  // copy_instructions_button = createButton("Copy Instructions")
+  // copy_instructions_button.mousePressed(copy_instructions_button_pressed)
 
   angleChanges()
   iterationsChange()
@@ -80,6 +83,8 @@ function setup() {
   rules.input(rulesChange)
   
   smooth()
+
+  // getRuleString(l_systems[0])
 }
 
 function draw() {
@@ -88,6 +93,7 @@ function draw() {
   push()
   translate(width/2, height/2)
   translate(offset.x, offset.y)
+  strokeWeight(5)
   if (color_mode == 'white') {
     stroke('white')
     l_system.draw({len:length.value(), mode: 'absolute', colormode:'normal'})
@@ -116,6 +122,14 @@ function panCanvas() {
 function windowResized() {
   resizeCanvas(innerWidth * width_ratio, innerHeight)
   setSizes()
+}
+
+function setValues() {
+  axiom.elt.innerHTML = l_system.axiom
+  rules.elt.innerHTML = l_system.getRuleString()
+  angle.value(l_system.angle)
+  length.value(min(width, height) * l_system.len_ratio)
+  iterations.elt.max = l_system.max_iterations
 }
 
 function setSizes() {
@@ -199,15 +213,15 @@ function colorChanged() {
 }
 
 function export_hpgl_button_pressed() {
-  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, max(width, height))
-  let words = ['cow', 'butter', 'peanut', 'cat', 'pillow', 'oven', 'meerkat', 'eskimo', 'hope', 'joy', 'oolong', 'sunset', 'stop', 'tree', 'plant', 'alpaca', 'cupcake', 'veggie', 'booksmart', 'dijsktra', 'sammet', 'hopper', 'waffle', 'puma', 'backpack', 'park', 'bridge', 'goat', 'book', 'couche', 'pear', 'pair']
-  download(`${int(random(0, 20000))}_${random(words)}s_hpgl`, plot_txt)
-
-
+  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, min(width, height))
+  // let id = `${int(random(0, 999))}`.padStart(3, '0')
+  download(`${random(adjectives)}_${random(nouns)}.hpgl`, plot_txt)
   // console.log("hi")
 }
 
-
+function copy_instructions_button_pressed() {
+  copyToClipboard(l_system.instructions)
+}
 
 function isRuleValid(rule_string) {
   return /^\s*[A-Zf]\s*:\s*[A-Zf\+\-\[\]]*\s*$/.test(rule_string)
@@ -232,5 +246,44 @@ function download(filename, text) {
   document.body.removeChild(element)
 }
 
+// Copies a string to the clipboard. Must be called from within an 
+// event handler such as click. May return false if it failed, but
+// this is not always possible. Browser support for Chrome 43+, 
+// Firefox 42+, Safari 10+, Edge and IE 10+.
+// IE: The clipboard feature may be disabled by an administrator. By
+// default a prompt is shown the first time the clipboard is 
+// used (per session).
+// From: https://stackoverflow.com/questions/400212/how-do-i-copy-to-the-clipboard-in-javascript
+function copyToClipboard(text) {
+  if (window.clipboardData && window.clipboardData.setData) {
+      // IE specific code path to prevent textarea being shown while dialog is visible.
+      return clipboardData.setData("Text", text); 
+
+  } else if (document.queryCommandSupported && document.queryCommandSupported("copy")) {
+      var textarea = document.createElement("textarea");
+      textarea.textContent = text;
+      textarea.style.position = "fixed";  // Prevent scrolling to bottom of page in MS Edge.
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+          return document.execCommand("copy");  // Security exception may be thrown by some browsers.
+      } catch (ex) {
+          console.warn("Copy to clipboard failed.", ex);
+          return false;
+      } finally {
+          document.body.removeChild(textarea);
+      }
+  }
+}
+
+
+function getRuleString(rules) {
+  for (let [k, v] in Object.entries(rules)) {
+    console.log(`${k}, ${v}`)
+  }
+}
+
+
 // Start file download.
+
 
