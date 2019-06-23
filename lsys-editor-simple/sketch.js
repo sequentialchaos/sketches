@@ -213,7 +213,7 @@ function colorChanged() {
 }
 
 function export_hpgl_button_pressed() {
-  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, min(width, height))
+  let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, (width + height)/2)
   // let id = `${int(random(0, 999))}`.padStart(3, '0')
   download(`${random(adjectives)}_${random(nouns)}.hpgl`, plot_txt)
   // console.log("hi")
