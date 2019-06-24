@@ -13,7 +13,7 @@ function setup() {
 
   title = createP('L-Systems Editor').style('font-weight', 'bold').style('font-size', '24px')
 
-  first = l_systems[0]
+  first = l_systems['Penrose']
   l_system = new L_system(
     first.axiom,
     first.rules,
@@ -22,6 +22,14 @@ function setup() {
     first.max_iterations,
     first.len_ratio
   )
+
+  picked_l_system_name = 'Penrose'
+  l_system_select = createSelect()
+  Object.keys(l_systems).forEach(key => {
+    l_system_select.option(key)
+  })
+
+  l_system_select.changed(l_system_selection_changed)
 
   createP('Axiom').style('font-weight', 'bold')
   axiom = createElement('textarea').size(left_width * 0.4, 35)
@@ -49,8 +57,13 @@ function setup() {
   length.input(lengthChanges)
 
   iterations_display = createP('# of iterations:')
-  iterations = createSlider(0, 10, 2, 1)
+  iterations = createSlider(0, max_iterations, 2, 1)
   iterations.input(iterationsChange)
+
+  stroke_weight_display = createP(`stroke weight: `)
+
+  stroke_weight = createSlider(1, 100, 5, 1)
+  stroke_weight.input(stroke_weight_changes)
 
   setValues()
   setSizes()
@@ -65,6 +78,17 @@ function setup() {
   color_select.option('pick a color')
   color_select.changed(colorChanged)
 
+
+  createP()
+
+
+  save_input_button = createButton("Save")
+  save_input_button.mousePressed(save_button_pressed)
+
+  createP()
+  load_input = createFileInput(handleLoad)
+
+
   createP()
   export_HPGL_button = createButton("Export HPGL")
   export_HPGL_button.mousePressed(export_hpgl_button_pressed)
@@ -72,6 +96,7 @@ function setup() {
 
   // copy_instructions_button = createButton("Copy Instructions")
   // copy_instructions_button.mousePressed(copy_instructions_button_pressed)
+
 
   angleChanges()
   iterationsChange()
@@ -96,12 +121,12 @@ function draw() {
   strokeWeight(5)
   if (color_mode == 'white') {
     stroke('white')
-    l_system.draw({len:length.value(), mode: 'absolute', colormode:'normal'})
+    l_system.draw({len:length.value(), mode: 'absolute', stroke_weight: stroke_weight.value(), colormode:'normal'})
   } else if (color_mode == 'pick a color') {
     stroke(picked_color)
-    l_system.draw({len:length.value(), mode: 'absolute', colormode:'normal'})
+    l_system.draw({len:length.value(), mode: 'absolute', stroke_weight: stroke_weight.value(), colormode:'normal'})
   } else {
-    l_system.draw({len:length.value(), mode: 'absolute', colormode:color_mode, colors_ratio:1/10})
+    l_system.draw({len:length.value(), mode: 'absolute', stroke_weight: stroke_weight.value(), colormode:color_mode, colors_ratio:1/10})
   }
   pop()
 }
@@ -129,16 +154,18 @@ function setValues() {
   rules.elt.innerHTML = l_system.getRuleString()
   angle.value(l_system.angle)
   length.value(min(width, height) * l_system.len_ratio)
-  iterations.elt.max = l_system.max_iterations
+  // iterations.elt.max = l_system.max_iterations
+  stroke_weight_display.elt.innerHTML = `stroke weight: ${stroke_weight.value()} px`
 }
 
 function setSizes() {
   left_width = innerWidth - width
-  angle.size(left_width * slider_width_ratio, 20)
-  length.size(left_width * slider_width_ratio, 20)
-  iterations.size(left_width * slider_width_ratio, 20)
+  angle.size(left_width * slider_width_ratio, 10)
+  length.size(left_width * slider_width_ratio, 10)
+  iterations.size(left_width * slider_width_ratio, 10)
   axiom.size(left_width * slider_width_ratio, 35)
   rules.size(left_width * slider_width_ratio, 100)
+  stroke_weight.size(left_width * slider_width_ratio, 10)
 }
 
 function parseRules(rule_string) {
@@ -179,6 +206,10 @@ function iterationsChange() {
   redraw()
 }
 
+function stroke_weight_changes() {
+  stroke_weight_display.elt.innerHTML = `stroke weight: ${stroke_weight.value()} px`
+  redraw()
+}
 
 function axiomChanges() {
   let new_axiom = axiom.value()
@@ -212,15 +243,89 @@ function colorChanged() {
   redraw()
 }
 
+function l_system_selection_changed() {
+  picked_l_system_name = l_system_select.value()
+  let lsys = l_systems[picked_l_system_name]
+  print(lsys)
+  axiom.elt.innerHTML = lsys.axiom
+  rules.elt.innerHTML = rulesDictToString(lsys.rules)
+  angle.value(lsys.angle)
+  length.value(min(width, height) * lsys.len_ratio)
+  axiomChanges()
+  rulesChange()
+  angleChanges()
+  lengthChanges()
+  l_system.max_iterations = lsys.max_iterations
+  // iterations.elt.max = l_sys.max_iterations
+  // redraw()
+}
+
 function export_hpgl_button_pressed() {
   let plot_txt = formatForPlotterAutoCenter(l_system.turtle.lines, (width + height)/2)
-  // let id = `${int(random(0, 999))}`.padStart(3, '0')
-  download(`${random(adjectives)}_${random(nouns)}.hpgl`, plot_txt)
+  let id = `${int(random(0, 999))}`.padStart(3, '0')
+  download(`${random(adjectives)}_${random(nouns)}_${id}.txt`, plot_txt)
+  // console.log("hi")
+}
+
+function save_button_pressed() {
+  let id = `${int(random(0, 999))}`.padStart(3, '0')
+  download(`${random(adjectives)}_${random(nouns)}_${id}.txt`, l_system.toString())
   // console.log("hi")
 }
 
 function copy_instructions_button_pressed() {
   copyToClipboard(l_system.instructions)
+}
+
+function handleLoad(file) {
+  let string = file.data
+  fromString(string)
+  axiomChanges()
+  rulesChange()
+  angleChanges()
+  lengthChanges()
+  l_system.max_iterations = max_iterations
+}
+
+function fromString(string) {
+  let rows = string.split('\n')
+  let i = 0
+  while (i < rows.length) {
+    if (rows[i].trim() == 'Axiom:') {
+      axiom.elt.innerHTML = rows[i+1]
+      console.log('Axiom:', rows[i+1])
+      i++
+    } else if (rows[i].trim() == 'Rules:') {
+      rule_string = ''
+      let j = i+1
+      while (rows[j].trim() != 'Angle:' && j < 20) {
+        rule_string += rows[j] + '\n'
+        j++
+      }
+      i = j
+      rules.elt.innerHTML = rule_string
+      continue
+    } else if (rows[i].trim() == 'Angle:') {
+      let loaded_angle = float(rows[i+1])
+      print(loaded_angle)
+      if (loaded_angle >= 0 && loaded_angle <= 360) {
+        angle.value(loaded_angle)
+        i++
+      } 
+    } else if (rows[i].trim() == 'Length:') {
+      let loaded_length = float(rows[i+1])
+      if (loaded_length >= 0 && loaded_length <= 1000) {
+        length.value(loaded_length)
+        i++
+      }
+    }
+    i++
+  }
+  for (let [i, row] of rows.entries()) {
+    if (row == 'Axiom:') {
+
+    }
+  }
 }
 
 function isRuleValid(rule_string) {
@@ -231,6 +336,13 @@ function isAxiomValid(axiom_string) {
   return /^\s*[A-Zf\+\-\[\]]*\s*$/.test(axiom_string)
 }
 
+function rulesDictToString(rules) {
+  let string = ''
+  for (let [k, v] of Object.entries(rules)) {
+    string += `${k}: ${v}\n`
+  }
+  return string
+}
 
 // from: https://ourcodeworld.com/articles/read/189/how-to-create-a-file-and-generate-a-download-with-javascript-in-the-browser-without-a-server
 function download(filename, text) {
