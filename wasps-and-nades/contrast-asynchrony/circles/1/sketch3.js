@@ -3,7 +3,7 @@ function setup() {
   duration = 14
   animationFrames = frame_rate*duration
   
-  length = 800// min(innerWidth, innerHeight)
+  length = min(innerWidth, innerHeight)
   createCanvas(length, length).center('horizontal')
   frameRate(frame_rate)
   num_circles = 2
@@ -21,7 +21,7 @@ function setup() {
   mystery_color = color(100, 100, 118)
   pink = color("#d83c85")
 
-  record = true
+  record = false
   if (record) {
     capturer = new CCapture({
       framerate: 60,

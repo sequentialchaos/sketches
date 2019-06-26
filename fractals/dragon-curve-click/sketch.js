@@ -17,7 +17,7 @@ let dragon_curve = new L_system(
 let instructions = axiom
 
 function setup() {
-  const length = min(innerWidth, innerHeight)
+  length = min(innerWidth, innerHeight)
   createCanvas(length, length).center('horizontal')
 
   frameRate(10)
@@ -28,6 +28,7 @@ function setup() {
 
 function mouseClicked() {
   dragon_curve.getNextInstructions()
+  print(dragon_curve.turtle.instructions.count('F'))
   clickCount++
 }
 
@@ -41,8 +42,8 @@ function draw() {
 
   push()
   // translate(width * p, height * (1 - p))
-  translate(width / 2, height / 2)
-  dragon_curve.draw({len: map(length, 300, 2000, 5, 12), colormode:'rainbow'})
+  translate(width * 0.7, height * 0.3)
+  dragon_curve.draw({len: 4, colormode:'rainbow'})
   pop()
 }
 

@@ -21,13 +21,17 @@ function setup() {
   createCanvas(length, length).center('horizontal')
 
   frameRate(10)
-
+  
   hilbert.getNextInstructions()
+  print(hilbert.instructions)
+
 }
 
 
 function mouseClicked() {
   hilbert.getNextInstructions()
+  print(hilbert.instructions)
+
   clickCount++
 }
 

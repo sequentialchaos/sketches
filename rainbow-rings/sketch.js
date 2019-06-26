@@ -1,6 +1,6 @@
-const maxRatio = 0.35;
-const numRings = 40;
-const ringRatio = maxRatio  / numRings / 2;
+const maxRatio = 0.35
+const numRings = 40
+const ringRatio = maxRatio  / numRings / 2
 const speed = 1 / (numRings)
 
 function setup() {
@@ -10,13 +10,13 @@ function setup() {
 }
 
 function draw() {
-  background(30)
+  background(5)
   noStroke()
 
   for (let i = 0; i < numRings; i++) {
-    rotateX(frameCount * speed);
-    rotateY(frameCount * speed * 0.50);
-    rotateZ(frameCount * speed * 0.25);
+    rotateX(frameCount * speed)
+    rotateY(frameCount * speed * 0.50)
+    rotateZ(frameCount * speed * 0.25)
     fill(map(i, 0, numRings, 0, 100), 80, 95)
     torus(width * (maxRatio - i * ringRatio * 2), width * ringRatio)
   }
