@@ -2,16 +2,19 @@ function setup() {
   createCanvas(innerWidth, innerHeight)
   background(0)
   frameRate(30)
+  
   x = 0
   x_prev = 0
   dx = 4
 
+  // initial lightness
   l = 80
 
   min_width = 10
   max_width = 150
   w = random(min_width, min_width * 4)
 
+  // initial hue
   h = random(0, 360)
 
   looping = true
@@ -21,8 +24,8 @@ function draw() {
   noStroke()
   fill(hpluvToColor(h, 100, l))
   rect(x, 0, dx+1, height)
-  x += dx
 
+  x += dx
   if (x > w + x_prev) {
     x_prev = x
     if (Math.random() < 0.35) {
@@ -49,12 +52,12 @@ function draw() {
 
 function hpluvToColor(h, p, l) {
   // h -> hue between 0 and 360,
-  // s -> saturation between 0 and 100,
+  // p -> saturation (?!) between 0 and 100,
   // l -> lightness between 0 and 100.
   push()
   colorMode(RGB, 1, 1, 1)
   rgb = hsluv.hpluvToRgb([h, p, l])
-  let c = color(rgb[0], rgb[1], rgb[2])
+  c = color(rgb[0], rgb[1], rgb[2])
   pop()
   return c
 }
