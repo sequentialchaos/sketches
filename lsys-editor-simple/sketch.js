@@ -2,7 +2,7 @@
 
 function setup() {
   width_ratio = 0.75
-  createCanvas(innerWidth * width_ratio, innerHeight, P2D).mouseMoved(panCanvas)
+  canvas = createCanvas(innerWidth * width_ratio, innerHeight, P2D).mouseMoved(panCanvas)
   noLoop()
 
   offset = createVector(0, 0)
@@ -143,6 +143,31 @@ function panCanvas() {
     offset.x = mouseX - mouse.x + poffset.x
     offset.y = mouseY - mouse.y + poffset.y
     redraw()
+  }
+}
+
+function mouseWheel(event) {
+  // event.preventDefault()
+
+  if (event.target == canvas.elt) {
+    // zoomy stuffr
+
+    if (event.delta < 0) {
+      old_length = length.value();
+      new_length = length.value() / 10 * 9
+      if (Math.ceil(new_length) >= old_length-1) {
+        new_length--;
+      }
+      print(new_length, old_length)
+    } else {
+      old_length = length.value();
+      new_length = old_length / 9 * 10 + 1
+      print(new_length, old_length)
+      
+    }
+    length.value(new_length)
+    lengthChanges()
+  } else {
   }
 }
 
