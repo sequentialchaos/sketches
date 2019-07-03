@@ -1,6 +1,20 @@
 
 
 function setup() {
+
+  const sty = document.createElement('style');
+  if (Math.random() > 0.5) {
+    print('yes')
+    sty.innerHTML = 'p::before {content:"a "}'
+  } else {
+    print('no')
+    sty.innerHTML = 'p::before {content:"not a "}'
+    
+  }
+  document.body.append(sty);
+
+
+
   width_ratio = 0.75
   canvas = createCanvas(innerWidth * width_ratio, innerHeight, P2D).mouseMoved(panCanvas)
   noLoop()
