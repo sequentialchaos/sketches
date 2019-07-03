@@ -2,16 +2,16 @@
 
 function setup() {
 
-  const sty = document.createElement('style');
-  if (Math.random() > 0.5) {
-    print('yes')
-    sty.innerHTML = 'p::before {content:"a "}'
-  } else {
-    print('no')
-    sty.innerHTML = 'p::before {content:"not a "}'
+  // const sty = document.createElement('style');
+  // if (Math.random() > 0.5) {
+  //   print('yes')
+  //   sty.innerHTML = 'p::before {content:"a "}'
+  // } else {
+  //   print('no')
+  //   sty.innerHTML = 'p::before {content:"not a "}'
     
-  }
-  document.body.append(sty);
+  // }
+  // document.body.append(sty);
 
 
 
