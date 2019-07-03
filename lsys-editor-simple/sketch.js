@@ -11,7 +11,9 @@ function setup() {
   left_width = innerWidth - width
   slider_width_ratio = 0.9
 
-  title = createP('L-Systems Editor').style('font-weight', 'bold').style('font-size', '24px')
+  sidebar = createDiv().addClass('sidebar')
+
+  title = createP('L-Systems Editor').style('font-weight', 'bold').style('font-size', '24px').parent(sidebar)
 
   first = l_systems['Penrose']
   l_system = new L_system(
@@ -24,15 +26,15 @@ function setup() {
   )
 
   picked_l_system_name = 'Penrose'
-  l_system_select = createSelect()
+  l_system_select = createSelect().parent(sidebar)
   Object.keys(l_systems).forEach(key => {
     l_system_select.option(key)
   })
 
   l_system_select.changed(l_system_selection_changed)
 
-  createP('Axiom').style('font-weight', 'bold')
-  axiom = createElement('textarea').size(left_width * 0.4, 35)
+  createP('Axiom').style('font-weight', 'bold').parent(sidebar)
+  axiom = createElement('textarea').size(left_width * 0.4, 35).parent(sidebar)
 //   axiom.elt.innerHTML = '[B]++[B]++[B]++[B]++[B]'
 //   rule_string = `A: CF++DF----BF[-CF----AF]++
 //   B: +CF--DF[---AF--BF]+
@@ -41,37 +43,37 @@ function setup() {
 //   F: 
 // `.replace(/ /g,'')
 
-  createP('Rules').style('font-weight', 'bold')
-  rules = createElement('textarea')
+  createP('Rules').style('font-weight', 'bold').parent(sidebar)
+  rules = createElement('textarea').parent(sidebar)
   // rules.elt.innerHTML = rule_string
   
-  angle_div = createDiv()
-  angle_display = createP('angle:')
-  angle = createSlider(0, 360, 36, 0.01)
+  angle_div = createDiv().parent(sidebar)
+  angle_display = createP('angle:').parent(sidebar)
+  angle = createSlider(0, 360, 36, 0.01).parent(sidebar)
   angle.input(angleChanges)
   angle_div.child(angle_display)
   angle_div.child(angle)
 
-  length_display = createP('step length:')
-  length = createSlider(0, height * 0.6, 30, 1)
+  length_display = createP('step length:').parent(sidebar)
+  length = createSlider(0, height * 0.6, 30, 1).parent(sidebar)
   length.input(lengthChanges)
 
-  iterations_display = createP('# of iterations:')
-  iterations = createSlider(0, max_iterations, 2, 1)
+  iterations_display = createP('# of iterations:').parent(sidebar)
+  iterations = createSlider(0, max_iterations, 2, 1).parent(sidebar)
   iterations.input(iterationsChange)
 
-  stroke_weight_display = createP(`stroke weight: `)
+  stroke_weight_display = createP(`stroke weight: `).parent(sidebar)
 
-  stroke_weight = createSlider(1, 100, 5, 1)
+  stroke_weight = createSlider(1, 100, 5, 1).parent(sidebar)
   stroke_weight.input(stroke_weight_changes)
 
   setValues()
   setSizes()
   
-  createP()
+  createP().parent(sidebar)
   picked_color = 'none'
   color_mode = 'rainbow'
-  color_select = createSelect()
+  color_select = createSelect().parent(sidebar)
   color_select.option('rainbow')
   color_select.option('rainbow remix')
   color_select.option('white')
@@ -79,18 +81,18 @@ function setup() {
   color_select.changed(colorChanged)
 
 
-  createP()
+  createP().parent(sidebar)
 
 
-  save_input_button = createButton("Save")
+  save_input_button = createButton("Save").parent(sidebar)
   save_input_button.mousePressed(save_button_pressed)
 
-  createP()
-  load_input = createFileInput(handleLoad)
+  createP().parent(sidebar)
+  load_input = createFileInput(handleLoad).parent(sidebar)
 
 
-  createP()
-  export_HPGL_button = createButton("Export HPGL")
+  createP().parent(sidebar)
+  export_HPGL_button = createButton("Export HPGL").parent(sidebar)
   export_HPGL_button.mousePressed(export_hpgl_button_pressed)
 
 
@@ -103,7 +105,7 @@ function setup() {
   lengthChanges()
 
   axiom.input(axiomChanges)
-  createP()
+  createP().parent(sidebar)
 
   rules.input(rulesChange)
   
@@ -293,7 +295,7 @@ function fromString(string) {
   while (i < rows.length) {
     if (rows[i].trim() == 'Axiom:') {
       axiom.elt.innerHTML = rows[i+1]
-      console.log('Axiom:', rows[i+1])
+      console.log('Axiom:', axiom.value())
       i++
     } else if (rows[i].trim() == 'Rules:') {
       rule_string = ''
@@ -321,19 +323,14 @@ function fromString(string) {
     }
     i++
   }
-  for (let [i, row] of rows.entries()) {
-    if (row == 'Axiom:') {
-
-    }
-  }
 }
 
 function isRuleValid(rule_string) {
-  return /^\s*[A-Zf]\s*:\s*[A-Zf\+\-\[\]]*\s*$/.test(rule_string)
+  return /^\s*[A-Zf]\s*:\s*[A-Zf\+\-\[\]<>]*\s*$/.test(rule_string)
 }
 
 function isAxiomValid(axiom_string) {
-  return /^\s*[A-Zf\+\-\[\]]*\s*$/.test(axiom_string)
+  return /^\s*[A-Zf\+\-\[\]<>]*\s*$/.test(axiom_string)
 }
 
 function rulesDictToString(rules) {
