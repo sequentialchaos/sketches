@@ -31,7 +31,7 @@ function setup() {
     donut_flame.getNextInstructions()
   }
   donut_flame.draw({len: length * 0.038, mode: 'absolute', colormode: 'normal', show: false})
-  console.log(donut_flame.turtle.angle_delta)
+  // console.log(donut_flame.turtle.angle_delta)
 
 
   num_lines = donut_flame.turtle.lines.length
