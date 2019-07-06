@@ -14,6 +14,8 @@ function setup() {
 
   stroke(50)
   
+  wait_seconds = 3
+
   player = new Player(width * 0.5, height * 0.8, 20)
   ghosterpillar = new Caterpillar({num_segments: 12, d: width * 0.28, w: width * 1.2, h: height * 1.2, trail_time: 0.28, fillColor: 'white'})
   katiepillar = new Caterpillar({num_segments: 7, t: 120398, dt: 0.019, d: width * 0.09, w: width * 1.4, h: height * 1.4, trail_time: 0.1, type: 'goal', name: 'Katie'})
@@ -29,17 +31,18 @@ function draw() {
   player.move(mouseX, mouseY)
   player.draw()
 
-
-  ghosterpillar.draw()
   ghosterpillar.move()
-  katiepillar.draw()
+  ghosterpillar.draw()
   katiepillar.move()
+  katiepillar.draw()
 
-  if (frameCount > 120) {
+  if (millis() > wait_seconds * 1000) {
     if (player.isCollidingWithFirstSegment(katiepillar)) {
-      print('nom nom nom')
+      // print('nom nom nom')
       if (katiepillar.num_segments == 1) {
         push()
+        ghosterpillar.draw(switch_faces=true)
+        katiepillar.draw(switch_faces=true)
         fill('white')
         stroke('black')
         strokeWeight(4)
@@ -54,7 +57,7 @@ function draw() {
   
     if (player.isCollidingWithCaterpillar(ghosterpillar)) {
       push()
-      print('oh noooo')
+      // print('oh noooo')
       fill('white')
       textSize(map(width, 300, 2000, 20, 100))
       stroke('black')
@@ -68,9 +71,16 @@ function draw() {
     fill('white')
     stroke('black')
     strokeWeight(4)
-    textSize(map(width, 300, 2000, 20, 80))
+    textSize(map(width, 300, 2000, 20, 60))
     textAlign(CENTER, CENTER)
-    text('D: SAVE KATIE FROM GHOSTERPILLAR!', width/2, height/2)
+    text('YOU ARE A GREEN PELLET. MOVE YOUR MOUSE TO FIND YOURSELF!', width, height/2)
+    text('MOVE YOUR MOUSE TO FIND YOURSELF!', width/2, height * 0.6)
+    text('AVOID THE WHITE GHOSTERPILLAR AT ALL COST!', width/2, height * 0.7)
+
+    // text('D: SAVE KATIE FROM GHOSTERPILLAR!', width/2, height/2)
+    textSize(map(width, 300, 2000, 30, 80))
+
+    text(wait_seconds - int(millis() / 1000), width/2, height * 0.6)
     pop()
   }
 
@@ -110,7 +120,7 @@ class Caterpillar {
     this.t += this.dt
   }
 
-  draw() {
+  draw(switch_faces=false) {
     if (this.num_segments < 1) {
       return
     }
@@ -128,9 +138,17 @@ class Caterpillar {
 
       if (i == this.num_segments - 1) {
         if (this.type == 'goal') {
-          this.drawFaces(segment[0], segment[1], this.d, 0.7, 'frown')        
+          if (switch_faces) {
+            this.drawFaces(segment[0], segment[1], this.d, 0.7, 'smile')
+          } else {
+            this.drawFaces(segment[0], segment[1], this.d, 0.7, 'frown')       
+          }
         } else if (this.type == 'chaser') {
-          this.drawFaces(segment[0], segment[1], this.d, 0.7, 'smile')        
+          if (switch_faces) {
+            this.drawFaces(segment[0], segment[1], this.d, 0.7, 'frown')
+          } else {
+            this.drawFaces(segment[0], segment[1], this.d, 0.7, 'smile')       
+          }   
         }
       }
 

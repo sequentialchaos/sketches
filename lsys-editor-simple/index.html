@@ -8,7 +8,11 @@
     <style> canvas {position: absolute; right: 0; top: 0; margin: 0}</style>
     <style> .sidebar {height: 100vh; overflow: auto;}</style>
     <style> textarea {border-radius: 5px;}</style>
-    <style> input::-moz-range-track{background: gray;}</style>
+    <style> 
+      input::-moz-range-track{background: gray;}
+      input::-webkit-slider-runnable-track{background: gray;}
+      input::-ms-track{background: gray;}
+    </style>
     <style> input::-moz-range-thumb{border-radius:0;border:1px solid black; background: darkslategray; width: 1.4vh;  height: 1.4vh}
     input::-moz-range-thumb{
       cursor: pointer;

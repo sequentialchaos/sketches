@@ -172,11 +172,9 @@ function mouseWheel(event) {
       if (Math.ceil(new_length) >= old_length-1) {
         new_length--;
       }
-      print(new_length, old_length)
     } else {
       old_length = length.value();
       new_length = old_length / 9 * 10 + 1
-      print(new_length, old_length)
       
     }
     length.value(new_length)
@@ -287,7 +285,6 @@ function colorChanged() {
 function l_system_selection_changed() {
   picked_l_system_name = l_system_select.value()
   let lsys = l_systems[picked_l_system_name]
-  print(lsys)
   axiom.elt.innerHTML = lsys.axiom
   rules.elt.innerHTML = rulesDictToString(lsys.rules)
   angle.value(lsys.angle)
@@ -348,7 +345,6 @@ function fromString(string) {
       continue
     } else if (rows[i].trim() == 'Angle:') {
       let loaded_angle = float(rows[i+1])
-      print(loaded_angle)
       if (loaded_angle >= 0 && loaded_angle <= 360) {
         angle.value(loaded_angle)
         i++
@@ -365,11 +361,11 @@ function fromString(string) {
 }
 
 function isRuleValid(rule_string) {
-  return /^\s*[A-Zf]\s*:\s*[A-Zf\+\-\[\]<>]*\s*$/.test(rule_string)
+  return /^\s*[A-Zf]\s*:\s*[A-Zf\+\-\[\]<>|#!]*\s*$/.test(rule_string)
 }
 
 function isAxiomValid(axiom_string) {
-  return /^\s*[A-Zf\+\-\[\]<>]*\s*$/.test(axiom_string)
+  return /^\s*[A-Zf\+\-\[\]<>|#!]*\s*$/.test(axiom_string)
 }
 
 function rulesDictToString(rules) {

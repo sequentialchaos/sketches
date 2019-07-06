@@ -1,7 +1,7 @@
 const maxRatio = 0.35
 const numRings = 40
 const ringRatio = maxRatio  / numRings / 2
-const speed = 1 / (numRings)
+const speed = 1 / numRings
 
 function setup() {
   const length = min(innerWidth, innerHeight)
@@ -10,7 +10,7 @@ function setup() {
 }
 
 function draw() {
-  background(5)
+  background(0)
   noStroke()
 
   for (let i = 0; i < numRings; i++) {
