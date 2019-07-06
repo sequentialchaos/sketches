@@ -12,7 +12,7 @@ function setup() {
   createCanvas(length, length).center('horizontal')
   
   colorMode(HSB)
-  background(10)
+  background(0)
   
   i = TWO_PI / 800
   max_d = (width*width + height*height) * 0.1
