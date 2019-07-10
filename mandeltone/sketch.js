@@ -47,7 +47,7 @@ function draw() {
 
   passed_time = millis() - start_time
   step = Math.floor(passed_time/step_duration)
-  print(step)
+  // print(step)
 
   while (n < step) {
     olda0 = map(a[0], -2, 0.5, 0, width)
@@ -67,9 +67,10 @@ function draw() {
     }
     n++
 
-    if (step > last_step) {
-      last_step = step
+    if (n > last_step) {
+      last_step = n
       distance = Math.sqrt(a[0]*a[0] + b[0]*b[0])
+      print(distance, step, a[0], b[0], map_x, map_y)
       frequency = distance*1000
       // Beware of the attacking triggers:
       synth.triggerAttackRelease(frequency, "128n") // goodbye discord oh nooo uhhh
