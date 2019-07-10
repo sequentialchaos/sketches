@@ -3,9 +3,11 @@ let b = [0, 0, 0]
 const max_n = 100
 const step_duration = 250
 
-function preload() {
-  synth = new Tone.PolySynth(2, Tone.Monophonic.PluckSynth).toMaster()
+function preload() { // hello
+  vol = new Tone.Volume(-12)
+  synth = new Tone.PolySynth(4, Tone.Monophonic.PluckSynth)//.toMaster()
   synth.set({resonance: 0.9, dampening: 5000})
+  synth.chain(vol, Tone.Master)
 }
 
 function setup() {
@@ -71,13 +73,16 @@ function draw() {
     if (n > last_step) {
       last_step = step
       distance = Math.sqrt(a[0]*a[0] + b[0]*b[0])
-      print(distance, step, a[0], b[0], map_x, map_y)
+      // print(distance, step, a[0], b[0], map_x, map_y)
       frequency = distance*1000
 
       frequency1 = a[0]*1000
       frequency2 = b[0]*1000
+      frequency3 = frequency1*2
+      frequency4 = frequency2*2
+
       // Beware of the attacking triggers:
-      synth.triggerAttackRelease([frequency1, frequency2], "16n") // goodbye discord oh nooo uhhh
+      synth.triggerAttackRelease([frequency1, frequency2, frequency3, frequency4], "16n") // goodbye discord oh nooo uhhh
     }
 
       // let bright = map(n, 0, max_n, 0, 255)
