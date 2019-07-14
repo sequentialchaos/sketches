@@ -73,11 +73,11 @@ function draw() {
     strokeWeight(4)
     textSize(map(width, 300, 2000, 20, 60))
     textAlign(CENTER, CENTER)
-    text('YOU ARE A GREEN PELLET. MOVE YOUR MOUSE TO FIND YOURSELF!', width, height/2)
-    text('MOVE YOUR MOUSE TO FIND YOURSELF!', width/2, height * 0.6)
-    text('AVOID THE WHITE GHOSTERPILLAR AT ALL COST!', width/2, height * 0.7)
+    // text('YOU ARE A GREEN PELLET. MOVE YOUR MOUSE TO FIND YOURSELF!', width, height/2)
+    // text('MOVE YOUR MOUSE TO FIND YOURSELF!', width/2, height * 0.6)
+    // text('AVOID THE WHITE GHOSTERPILLAR AT ALL COST!', width/2, height * 0.7)
 
-    // text('D: SAVE KATIE FROM GHOSTERPILLAR!', width/2, height/2)
+    text('D: SAVE KATIE FROM GHOSTERPILLAR!', width/2, height/2)
     textSize(map(width, 300, 2000, 30, 80))
 
     text(wait_seconds - int(millis() / 1000), width/2, height * 0.6)
