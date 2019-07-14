@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css?family=Caveat+Brush|Hi+Melody&display=swap');
 
 :root {
-  --thumb-size: 25vmin; 
+  --thumb-size: 16vmin; 
 }
 
 html, body {
@@ -56,10 +56,6 @@ html, body {
   color: #000000;
   text-decoration: none;
   font-family: 'Caveat Brush', Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-}
-
-.wrapper > a:hover {
-  /* font-size: 0; */
 }
 
 .thumb:hover {
