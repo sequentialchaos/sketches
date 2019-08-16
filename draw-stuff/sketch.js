@@ -1,36 +1,41 @@
-
-
 function setup() {
-  const length = min(innerWidth, innerHeight)
-  createCanvas(length, length).center('horizontal')
-  translate(width/2, height/2)
-  background(30)
-  drawStuff(0, 0, length * 0.25, 0.5)
+  createCanvas(innerWidth, innerHeight)
+
+  noLoop()
+
+  num_rows = 0
+  num_cols = 0
+
+  grid_calculations = calculateGrid(width, height)
+  grid = makeGrid(...Object.values(grid_calculations))
 }
 
+function draw() {
+  background(0)
 
-function drawStuff(cx, cy, r, ratio, i=0) {
-  fill(0, map(i, 0, 7, 0, 255), 175)
-  if (i % 2 == 0) {
-    let square = new RegularPolygon({cx:cx, cy:cy, n:4, r:r})
-    square.draw(false)
-    if (r > 4) {
-      let v = square.vertices
-      drawStuff(v[0].x, v[0].y, r*ratio, ratio, i+1)
-      drawStuff(v[1].x, v[1].y, r*ratio, ratio, i+1)
-      drawStuff(v[2].x, v[2].y, r*ratio, ratio, i+1)
-      drawStuff(v[3].x, v[3].y, r*ratio, ratio, i+1)
-    }
+}
+
+function calculateGrid(w, h) {
+  let l = max(w, h)
+  let num_rows, num_columns
+  if (l == w) {
+    num_columns = l
+    num_rows = h / num_columns
   } else {
-    let triangle = new RegularPolygon({cx:cx, cy:cy, n:3, r:r})
-    triangle.draw(false)
-    if (r > 4) {
-      let v = triangle.vertices
-      drawStuff(v[0].x, v[0].y, r*ratio, ratio, i+1)
-      drawStuff(v[1].x, v[1].y, r*ratio, ratio, i+1)
-      drawStuff(v[2].x, v[2].y, r*ratio, ratio, i+1)
-    }
+    num_rows = l
+    num_columns = h / num_rows
   }
+  let cell_width = w / num_columns
+  let cell_height = h / num_rows
+  return {
+    cell_width: cell_width,
+    cell_height: cell_height,
+    num_rows: num_rows,
+    num_columns: num_columns
+  }
+}
 
+function makeGrid(cell_width, cell_height, num_rows, num_columns) {
+  let grid = []
 
 }

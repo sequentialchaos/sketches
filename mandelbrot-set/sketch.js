@@ -3,17 +3,17 @@ let b = [0, 0, 0];
 const max_n = 100;
 
 function setup() {
-  let length = min(innerWidth, innerHeight)
-  if (length == innerWidth) {
-    createCanvas(length, floor(length * 0.80)).center('horizontal')
-  } else {
-    createCanvas(floor(length * 1.25), length).center('horizontal')
-  }
-  
+  // let length = min(innerWidth, innerHeight)
+  // if (length == innerWidth) {
+  //   createCanvas(length, floor(length * 0.80)).center('horizontal')
+  // } else {
+  //   createCanvas(floor(length * 1.25), length).center('horizontal')
+  // }
+  createCanvas(innerWidth, innerHeight)
   noLoop()
   pixelDensity(1)
   loadPixels()
-  background(40)
+  
   for (let x = 0; x < width; x++) {
     for (let y = 0; y < height; y++) {
       a[0] = map(x, 0, width, -2, 0.5)
@@ -31,7 +31,6 @@ function setup() {
         }
         n++
       }
-
 
       let bright = map(n, 0, max_n, 0, 255)
       if (n === max_n) {

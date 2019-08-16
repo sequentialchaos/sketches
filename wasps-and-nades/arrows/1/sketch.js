@@ -1,7 +1,7 @@
 let s, n
 let angle = 0
 let t = 0
-let framerate = 20
+let framerate = 60
 let duration = 10
 let animationFrames = framerate * duration
 

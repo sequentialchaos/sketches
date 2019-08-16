@@ -1,6 +1,6 @@
 let capturer = new CCapture({
   framerate: 60,
-  format: "png",
+  format: "gif",
   // workersPath: "../../../../lib/",
   verbose: true
 });
@@ -398,6 +398,21 @@ function unitShapes(s, shapes) {
 }
 
 function drawShapes(f, s, n, angle) {
+  for (let i = 0; i < n + 5; i++) {
+    for (let j = 0; j < n + 5; j++) {
+      let x = map(i, 0, n, 0, width),
+        y = map(j, 0, n, 0, height);
+      push()
+      translate(x + s / 2, y + s / 2)
+      rotate(angle)
+      translate(s / 2, s / 2)
+      f(s)
+      pop()
+    }
+  }
+}
+
+function drawShapesRect(f, w, h, n, angle) {
   for (let i = 0; i < n + 5; i++) {
     for (let j = 0; j < n + 5; j++) {
       let x = map(i, 0, n, 0, width),

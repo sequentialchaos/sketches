@@ -1,10 +1,10 @@
 let a = [0, 0, 0]
 let b = [0, 0, 0]
 const max_n = 100
-const step_duration = 500
+const step_duration = 250
 
 function preload() {
-  synth = new Tone.Synth().toMaster()
+  synth = new Tone.PluckSynth({resonance: 0.9, dampening: 5000}).toMaster()
 }
 
 function setup() {
@@ -68,12 +68,12 @@ function draw() {
     n++
 
     if (n > last_step) {
-      last_step = n
+      last_step = step
       distance = Math.sqrt(a[0]*a[0] + b[0]*b[0])
-      print(distance, step, a[0], b[0], map_x, map_y)
+      // print(distance, step, a[0], b[0], map_x, map_y)
       frequency = distance*1000
       // Beware of the attacking triggers:
-      synth.triggerAttackRelease(frequency, "128n") // goodbye discord oh nooo uhhh
+      synth.triggerAttackRelease(frequency, "16n") // goodbye discord oh nooo uhhh
     }
 
       // let bright = map(n, 0, max_n, 0, 255)

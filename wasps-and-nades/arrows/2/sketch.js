@@ -1,10 +1,18 @@
 let s, n
 let angle = 0
 let t = 0
-let framerate = 20
+let framerate = 60
 let duration = 10
 let animationFrames = framerate * duration
 let drawWhite
+let gui
+
+// GUI control variables
+function controls() {
+  this.n = 3
+}
+
+let c = new controls()
 
 // From [0;1] to [0;1]
 function easeInOutQuart(t) {
@@ -19,13 +27,16 @@ function setup() {
 
   noStroke()
 
-  n = 10
-  s = length / n
 
-  let drawWhite = true
+  gui = new dat.GUI()
+  // gui.remember(c)
+  gui.add(c, 'n', 1, 10, 1)
+  n = 3
+  s = length / c.n
 }
 
 function draw() {
+  s = width / c.n
   t = (frameCount % animationFrames) / animationFrames
   let phase = Math.floor(t * 4)
   let angleAddition = 0
@@ -43,7 +54,7 @@ function draw() {
   // translate(width / 2, height / 2)
   // rotate()
   let shiftUp = phase / 4
-  drawArrows((shiftUp + angleAddition + easeInOutQuart(4 * (t % 0.25)) / 4) * TWO_PI)
+  drawArrows(s, c.n, (shiftUp + angleAddition + easeInOutQuart(4 * (t % 0.25)) / 4) * TWO_PI)
 }
 
 function upArrow(w, h) {
@@ -65,7 +76,7 @@ function upArrow(w, h) {
   pop()
 }
 
-function drawArrows(angle) {
+function drawArrows(s, n, angle) {
   for (let i = 0; i < n + 1; i++) {
     for (let j = 0; j < n + 1; j++) {
       let x = map(i, 0, n, 0, width),

@@ -5,7 +5,7 @@ const step_duration = 250
 
 function preload() { // hello
   vol = new Tone.Volume(-12)
-  synth = new Tone.PolySynth(4, Tone.Monophonic.PluckSynth)//.toMaster()
+  synth = new Tone.PolySynth(10, Tone.Monophonic.PluckSynth)//.toMaster()
   synth.set({resonance: 0.9, dampening: 5000})
   synth.chain(vol, Tone.Master)
 }
@@ -65,6 +65,13 @@ function draw() {
     map_y = map(b[0], -1, 1, 0, height)
     line(map_x, map_y, olda0, oldb0)
 
+    opacity = map(n, 0, step, 0, 255)
+    push()
+    noStroke()
+    fill(255, opacity)
+    circle(map_x, map_y, width/400) 
+    pop()
+  
     if (abs(a[0] + b[0]) > 16) {
       break
     }
@@ -73,6 +80,8 @@ function draw() {
     if (n > last_step) {
       last_step = step
       distance = Math.sqrt(a[0]*a[0] + b[0]*b[0])
+      line_length = Math.sqrt(Math.pow(map_x-olda0, 2) + Math.pow(map_y-oldb0, 2))
+      // is cigarette dead?! noooo
       // print(distance, step, a[0], b[0], map_x, map_y)
       frequency = distance*1000
 
@@ -80,9 +89,11 @@ function draw() {
       frequency2 = b[0]*1000
       frequency3 = frequency1*2
       frequency4 = frequency2*2
+      frequency5 = frequency3/frequency4
 
+      duration = 0.5//map(line_length, 0, width, 0.1, step_duration / 1000)
       // Beware of the attacking triggers:
-      synth.triggerAttackRelease([frequency1, frequency2, frequency3, frequency4], "16n") // goodbye discord oh nooo uhhh
+      synth.triggerAttackRelease([frequency1, frequency2, frequency3, frequency4], duration) // goodbye discord oh nooo uhhh
     }
 
       // let bright = map(n, 0, max_n, 0, 255)
@@ -96,4 +107,5 @@ function draw() {
       // pixels[p + 2] = bright
       // pixels[p + 3] = 255
   }
+  
 }
