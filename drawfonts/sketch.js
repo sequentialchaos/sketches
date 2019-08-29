@@ -13,7 +13,7 @@ function setup() {
     noLoop();
   }
 
-  cat_x = 0;
+  cat_x = -(409 - 323) / 2;
   cat_y = 409;
   cat = new Emoji(font, "🐈", 400, cat_x, cat_y);
   cat.scatter(width, height);
