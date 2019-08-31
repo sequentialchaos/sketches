@@ -3,13 +3,14 @@
 :root {
   --gap: 10px;
   --border-radius: 2px;
-  --thumb-size: 200px;
+  --thumb-size: 250px;
 }
 
 html,
 body {
   background-color: #222;
   margin: 0px;
+  padding: 0;
 }
 
 .container {
@@ -18,13 +19,12 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(var(--thumb-size), 1fr));
   /* grid-template-rows: minmax(var(--thumb-size), 1fr); */
   grid-auto-rows: var(--thumb-size);
-  margin: var(--gap);
+  margin: 0 calc(var(--gap) * 2);
 }
 
 .card {
   margin: 0;
   padding: 0;
-  border: var(--border-radius) solid rgba(137, 146, 146, 0.897);
 }
 
 .card-thumb {
@@ -32,19 +32,26 @@ body {
   height: 100%;
   object-fit: cover;
   opacity: 0.88;
+  border: var(--border-radius) solid rgba(137, 146, 146, 0.897);
 }
 
 .card-thumb:hover,
 .card-thumb:active {
   opacity: 1;
+  transform: scale(1.02);
+  border: calc(var(--border-radius) * 1.5) solid rgba(25, 202, 202, 0.808);
 }
 
-.my-box {
-  margin-left: 1em;
-  font-size: 1.5rem;
+.title {
+  padding: 0;
+  margin: 0.4em 0.6em;
+  font-size: 3rem;
   font-family: "Hi Melody", "Courier New", Courier, monospace;
   color: whitesmoke;
-  /* margin: 0 auto; */
-  /* background: blue; */
-  /* padding: 1em; */
+}
+
+@media (max-width: 500px) {
+  .title {
+    font-size: 2.2rem;
+  }
 }
