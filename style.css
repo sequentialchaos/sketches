@@ -8,7 +8,8 @@
 
 html,
 body {
-  background-color: #333;
+  background-color: rgb(49, 31, 53);
+
   margin: 0px;
   padding: 0;
 }
@@ -27,11 +28,13 @@ body {
   grid-template-columns: repeat(auto-fit, minmax(var(--thumb-size), 1fr));
   grid-auto-rows: var(--thumb-size);
   margin: 0 calc(var(--gap) * 1.5);
+  position: absolute;
 }
 
 .card {
   margin: 0;
   padding: 0;
+  position: relative;
 }
 
 .card-thumb {
@@ -47,19 +50,25 @@ body {
 
 .card-thumb:hover,
 .card-thumb:active {
-  opacity: 1;
   transform: scale(1.02);
-  border: calc(var(--border-width) * 1.5) solid rgba(34, 233, 233, 0.979);
+  border: calc(var(--border-width) * 1.5) solid rgb(78, 255, 255);
   box-shadow: 0 0 0;
 }
 
 .card-thumb:hover .card-info {
   opacity: 1;
+  background: green;
+  z-index: 99;
 }
 
 .card-info {
-  opacity: 0;
+  opacity: 1;
   background: yellow;
+  display: flex;
+  position: absolute;
+  bottom: 0;
+  padding: 0;
+  margin: 0;
 }
 
 .card-info:hover,
@@ -69,6 +78,7 @@ body {
 
 .card-title {
   background: white;
+  margin-left: 10px;
 }
 
 #canvas {
