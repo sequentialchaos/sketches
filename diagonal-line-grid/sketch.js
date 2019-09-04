@@ -1,6 +1,9 @@
 function setup() {
   min_length = min(innerWidth, innerHeight);
-  createCanvas(min_length, min_length);
+  createCanvas(min_length, min_length)
+    .center("horizontal")
+    .style("top", int((innerHeight - min_length) / 2) + "px");
+
   noLoop();
   colorMode(HSB, 100);
 
