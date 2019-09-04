@@ -10,7 +10,7 @@ function setup() {
   attempts_per_loop = 10;
 
   background(0);
-  colorMode(HSB, 100, 100, 100);
+  colorMode(HSB, 100, 100, 100, 100);
 }
 
 function draw() {
@@ -60,4 +60,10 @@ function doCirclesCollide(c1, c2) {
   } else {
     return false;
   }
+}
+
+function mouseClicked() {
+  background(0, 0, 0, 70);
+  circles = [];
+  loop();
 }
