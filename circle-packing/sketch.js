@@ -7,7 +7,7 @@ function setup() {
   max_circles = map(width * height, 700000, 3000000, 2500, 6000);
   min_radius = 2;
   max_radius = 50;
-  attempts_per_loop = 10;
+  attempts_per_loop = 4;
 
   background(0);
   colorMode(HSB, 100, 100, 100, 100);
