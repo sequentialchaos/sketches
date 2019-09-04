@@ -15,7 +15,7 @@ function setup() {
 
 function draw() {
   noStroke();
-  fill(random(100), 40, map(frameCount, 0, 100, 90, 100));
+  fill(random(100), 50, map(frameCount, 0, 100, 85, 100));
 
   for (let i = 0; i < attempts_per_loop; i++) {
     generateCircle(circles);
