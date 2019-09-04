@@ -4,7 +4,7 @@ function setup() {
 
   circles = [];
   num_circles = 0;
-  max_circles = map(width * height, 700000, 3000000, 2000, 5000);
+  max_circles = map(width * height, 700000, 3000000, 2500, 6000);
   min_radius = 2;
   max_radius = 50;
   attempts_per_loop = 10;
@@ -15,7 +15,7 @@ function setup() {
 
 function draw() {
   noStroke();
-  fill(random(100), 40, 100);
+  fill(random(100), 40, map(frameCount, 0, 100, 90, 100));
 
   for (let i = 0; i < attempts_per_loop; i++) {
     generateCircle(circles);
