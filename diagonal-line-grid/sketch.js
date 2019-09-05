@@ -4,36 +4,95 @@ function setup() {
     .center("horizontal")
     .style("top", int((innerHeight - min_length) / 2) + "px");
 
-  noLoop();
+  looping = true;
+  frame_rate = 10;
+
+  frameRate(frame_rate);
   colorMode(HSB, 100);
 
   num_rows = 30;
   cell_width = width / num_rows;
 
   strokeWeight(map(cell_width, 0, 30, 1, 7));
+
+  lines = [];
+  makeGrid();
 }
 
 function draw() {
   drawGrid();
+  for (let i = 0; i < num_rows * 0.25; i++) {
+    randomSwap();
+  }
 }
 
 function drawGrid() {
   background(3);
+  for (let i = 0; i < lines.length; i++) {
+    let l = lines[i];
+    stroke(l.color);
+    line(l.x1, l.y1, l.x2, l.y2);
+  }
+  if (frameCount < frame_rate * 2) {
+    showHelperText();
+  }
+}
 
+function makeGrid() {
   for (let i = 0; i < num_rows; i++) {
     for (let j = 0; j < num_rows; j++) {
-      x = j * cell_width;
-      y = i * cell_width;
-      stroke(map(i + j, 0, 2 * num_rows, 0, 100), 80, 85);
+      let x = j * cell_width;
+      let y = i * cell_width;
+      let stroke_color = color(map(i + j, 0, 2 * num_rows, 0, 100), 80, 85);
       if (Math.random() < 0.5) {
-        line(x, y, x + cell_width, y + cell_width);
+        lines.push({
+          x1: x,
+          y1: y,
+          x2: x + cell_width,
+          y2: y + cell_width,
+          color: stroke_color
+        });
       } else {
-        line(x + cell_width, y, x, y + cell_width);
+        lines.push({
+          x1: x + cell_width,
+          y1: y,
+          x2: x,
+          y2: y + cell_width,
+          color: stroke_color
+        });
       }
     }
   }
 }
 
+function randomSwap() {
+  let i = int(random(lines.length));
+  let tmp_x1 = lines[i].x1;
+  lines[i].x1 = lines[i].x2;
+  lines[i].x2 = tmp_x1;
+}
+
+function showHelperText() {
+  push();
+  rectMode(CENTER);
+  stroke("white");
+  fill(0, 0, 0, 50);
+  let rect_width = cell_width * 15;
+  let rect_height = rect_width * 0.35;
+  rect(width / 2, height / 2, rect_width, rect_height);
+  textAlign(CENTER, CENTER);
+  textSize(map(rect_width, 0, 1000, 30, 50));
+  strokeWeight(2);
+  text("Click to pause!", width / 2, height / 2);
+  pop();
+}
+
 function mouseClicked() {
-  redraw();
+  if (looping) {
+    noLoop();
+    looping = false;
+  } else {
+    loop();
+    looping = true;
+  }
 }
