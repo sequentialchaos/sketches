@@ -21,7 +21,7 @@ function setup() {
 
 function draw() {
   drawGrid();
-  for (let i = 0; i < num_rows * 0.25; i++) {
+  for (let i = 0; i < num_rows * 0.1; i++) {
     randomSwap();
   }
 }
@@ -77,7 +77,7 @@ function showHelperText() {
   rectMode(CENTER);
   stroke("white");
   fill(0, 0, 0, 50);
-  let rect_width = cell_width * 15;
+  let rect_width = cell_width * 20;
   let rect_height = rect_width * 0.35;
   rect(width / 2, height / 2, rect_width, rect_height);
   textAlign(CENTER, CENTER);
