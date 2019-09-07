@@ -1,5 +1,4 @@
 function setup() {
-  // min_length = min(innerWidth, innerHeight) * 0.75;
   createCanvas(innerWidth, innerHeight);
   colorMode(HSB, 1, 1, 1);
 
