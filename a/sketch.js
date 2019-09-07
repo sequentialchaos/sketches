@@ -18,7 +18,7 @@ function setup() {
         n: n,
         r: 20 + map(i, 0, num_polygons - 1, 0, width * 1.25),
         color: c,
-        cy: -height * 0.09
+        cy: -height * 0.1157
       })
     );
   }
@@ -43,7 +43,7 @@ function draw() {
   polygons.forEach((polygon, i) => {
     polygon.draw(color(1, 0, 1, 0.6));
     num_traces = 18;
-    trace_d = map(i, 0, num_polygons, 3, 10);
+    trace_d = map(i, 0, num_polygons, 2.5, 14);
     for (let j = 0; j < num_traces; j++) {
       // trace_d = map(j, 0, num_traces, 4, 6) * abs(sin(p + 1));
       polygon.trace((p + j / num_traces + i / num_polygons) % 1, trace_d);
