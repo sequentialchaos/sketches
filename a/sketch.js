@@ -8,20 +8,22 @@ function setup() {
   };
 
   colorMode(HSB, 1, 1, 1);
-  num_polygons = 20;
+  num_polygons = 40;
   polygons = [];
+  n = 3;
   for (let i = 0; i < num_polygons; i++) {
+    c = color(i / num_polygons, 1, 0.9);
     polygons.push(
       new Polygon({
-        n: 12,
-        r: 20 + map(i, 0, num_polygons - 1, 0, width * 0.45),
-        color: color(i / num_polygons, 1, 0.9),
-        cy: 0
+        n: n,
+        r: 20 + map(i, 0, num_polygons - 1, 0, width * 1.25),
+        color: c,
+        cy: -height * 0.09
       })
     );
   }
   frame_rate = 60;
-  anim_seconds = 60;
+  anim_seconds = 6;
   anim_frames = frame_rate * anim_seconds;
   looping = false;
   if (!looping) {
@@ -29,26 +31,24 @@ function setup() {
   } else {
     frameRate(frame_rate);
   }
+  strokeWeight(2);
 }
 
 function draw() {
+  background(0.02);
   translate(width / 2, height / 2);
 
-  stroke("white");
-  // line(l.x1, l.y1, l.x2, l.y2);
-
   p = (frameCount % anim_frames) / anim_frames;
-  background(0.02);
-  // cx = lerp(l.x1, l.x2, p);
-  // cy = lerp(l.y1, l.y2, p);
-  // fill(p, 0.8, 0.9);
-  // circle(cx, cy, 5);
-  polygons.forEach(polygon => {
-    // polygon.draw();
-    polygon.trace(p, 3);
+
+  polygons.forEach((polygon, i) => {
+    polygon.draw(color(1, 0, 1, 0.6));
+    num_traces = 18;
+    trace_d = map(i, 0, num_polygons, 3, 10);
+    for (let j = 0; j < num_traces; j++) {
+      // trace_d = map(j, 0, num_traces, 4, 6) * abs(sin(p + 1));
+      polygon.trace((p + j / num_traces + i / num_polygons) % 1, trace_d);
+    }
   });
-  polygons[19].draw();
-  // polygons[1].trace(p);
 }
 
 class Polygon {
@@ -91,13 +91,13 @@ class Polygon {
     return lines;
   }
 
-  trace(p, d) {
+  trace(p, d, c) {
     let i = int(p * this.n);
     let v1 = this.vertices[i];
     let v2 = this.vertices[(i + 1) % this.vertices.length];
     let x = lerp(v1.x, v2.x, (p % (1 / this.n)) * this.n);
     let y = lerp(v1.y, v2.y, (p % (1 / this.n)) * this.n);
-    fill(this.color);
+    c ? fill(c) : fill(this.color);
     noStroke();
     circle(x, y, d);
   }
