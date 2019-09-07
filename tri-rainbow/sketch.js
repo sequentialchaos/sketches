@@ -1,8 +1,9 @@
 function setup() {
+  min_length = min(innerWidth, innerHeight);
   createCanvas(innerWidth, innerHeight);
   colorMode(HSB, 1, 1, 1);
 
-  num_polygons = 46;
+  num_polygons = map(min_length, 300, 1200, 10, 50);
   polygons = [];
   n = 3;
   for (let i = 0; i < num_polygons; i++) {
