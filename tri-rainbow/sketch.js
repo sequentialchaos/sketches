@@ -11,7 +11,7 @@ function setup() {
     polygons.push(
       new Polygon({
         n: n,
-        r: 2 + map(i, 0, num_polygons - 1, 0, width * 1.2),
+        r: 8 + map(i, 0, num_polygons - 1, 0, width * 1.2),
         color: c,
         a: 0,
         cy: -height * 0.1
