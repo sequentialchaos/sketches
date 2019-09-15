@@ -1,59 +1,57 @@
-
 function setup() {
+  frame_rate = 60;
 
-  frame_rate = 60
+  isLooping = true;
+  length = min(innerWidth, innerHeight);
+  createCanvas(length, length);
+  frameRate(frame_rate);
 
-  isLooping = true
-  length = min(innerWidth, innerHeight)
-  createCanvas(length, length)
-  frameRate(frame_rate)
-
-  record = false
+  record = false;
   if (record) {
     capturer = new CCapture({
       framerate: 60,
-      format: 'gif',
+      format: "gif",
       workersPath: "../lib/",
       verbose: true
-    })
-    capturer.start()
+    });
+    capturer.start();
   }
 
-  angle = 0
+  angle = 0;
 }
 
-function draw() {  
-  background(0)
-  translate(width/2, height/2)
+function draw() {
+  background(0);
+  translate(width / 2, height / 2);
 
   if (record) {
     capturer.capture(canvas);
     if (angle > 360) {
-      capturer.stop()
-      capturer.save()
+      capturer.stop();
+      capturer.save();
 
-      noLoop()
+      noLoop();
     }
   }
 }
 
 function mousePressed() {
   if (isLooping) {
-    noLoop()
-    isLooping = false
+    noLoop();
+    isLooping = false;
   } else {
-    loop()
-    isLooping = true
+    loop();
+    isLooping = true;
   }
 }
 
 function elasticOut(t) {
-  a = 1 
-  p = 0.3
+  a = 1;
+  p = 0.3;
   s = Math.asin(1 / (a = Math.max(1, a))) * (p /= TWO_PI);
   return 1 - a * Math.pow(2, -10 * (t = +t)) * Math.sin((t + s) / p);
 }
 
-
-function easeInOutQuart(t) { return t<.5 ? 8*t*t*t*t : 1-8*(--t)*t*t*t }
-
+function easeInOutQuart(t) {
+  return t < 0.5 ? 8 * t * t * t * t : 1 - 8 * --t * t * t * t;
+}

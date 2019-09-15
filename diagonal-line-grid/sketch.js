@@ -43,7 +43,11 @@ function makeGrid() {
     for (let j = 0; j < num_rows; j++) {
       let x = j * cell_width;
       let y = i * cell_width;
-      let stroke_color = color(map(i + j, 0, 2 * num_rows, 0, 100), 80, 85);
+      let stroke_color = hpluvToColor(
+        map(i + j, 0, 2 * num_rows, 0, 360),
+        300,
+        80
+      );
       if (Math.random() < 0.5) {
         lines.push({
           x1: x,
@@ -83,8 +87,21 @@ function showHelperText() {
   textAlign(CENTER, CENTER);
   textSize(map(rect_width, 0, 1000, 30, 50));
   strokeWeight(2);
+  fill("white");
   text("Click to pause!", width / 2, height / 2);
   pop();
+}
+
+function hpluvToColor(h, p, l) {
+  // h -> hue between 0 and 360,
+  // p -> saturation (?!) between 0 and 100,
+  // l -> lightness between 0 and 100.
+  push();
+  colorMode(RGB, 1, 1, 1);
+  rgb = hsluv.hpluvToRgb([h, p, l]);
+  c = color(rgb[0], rgb[1], rgb[2]);
+  pop();
+  return c;
 }
 
 function mouseClicked() {

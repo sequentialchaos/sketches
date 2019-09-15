@@ -37,6 +37,7 @@ function generateCircle() {
   }
 
   while (doesCircleFit(new_circle) && new_circle.r < max_radius) {
+    circle(new_circle.cx, new_circle.cy, new_circle.r);
     new_circle.r += 1;
   }
 

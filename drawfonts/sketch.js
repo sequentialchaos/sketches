@@ -13,19 +13,29 @@ function setup() {
     noLoop();
   }
 
-  cat_x = -(409 - 323) / 2;
-  cat_y = 409;
-  cat = new Emoji(font, "🐈", 400, cat_x, cat_y);
-  cat.scatter(width, height);
+  num_fireworks = 1;
+  fireworks_list = [];
+  for (let i = 0; i < num_fireworks; i++) {
+    fireworks_size = random(200, 400);
+    fireworks_x = random(-50, width - fireworks_size - 100);
+    fireworks_y = random(300, height);
+    fireworks_list.push(
+      new Emoji(font, "🎆", fireworks_size, fireworks_x, fireworks_y)
+    );
+  }
+  colors = [
+    [color("lightgreen"), color("lightblue")],
+    [color("red"), color("blue")],
+    [color("cyan"), color("purple")]
+  ];
 }
 
 function draw() {
   background(0);
-  anim_frames = 60;
-  if (frameCount <= anim_frames) {
-    cat.unscatter(2, 0, anim_frames, frameCount);
-  } else {
-    cat.drawPointsRainbow(2, 700, 10, frameCount);
+  for (let i = 0; i < fireworks_list.length; i++) {
+    fireworks = fireworks_list[i];
+    c = colors[i];
+    fireworks.drawPointsGradient(2, 13, c[0], c[1], frameCount);
   }
 }
 
@@ -66,13 +76,13 @@ class Emoji {
     }
   }
 
-  drawPointsGradient(point_diameter, color1, color2, frame_count) {
+  drawPointsGradient(point_diameter, speed, color1, color2, frame_count) {
     for (let i = 0; i < this.points.length; i++) {
       let p = this.points[i];
       let fill_color = lerpColor(
         color1,
         color2,
-        ((i + frame_count) % this.points.length) / this.points.length
+        ((i + frame_count + speed) % this.points.length) / this.points.length
       );
       fill(fill_color);
       circle(p.x, p.y, point_diameter);

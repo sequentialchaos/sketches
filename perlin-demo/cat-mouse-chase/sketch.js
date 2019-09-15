@@ -9,7 +9,7 @@ function setup() {
   avg = 0;
 
   settings = function() {
-    this.dt = 0.02;
+    this.dt = 0.04;
     this.detail = 38;
     this.falloff = 0.263;
     this.trail_time = 0.61;
