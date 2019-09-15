@@ -14,8 +14,9 @@ function setup() {
         tile_x = (i / num_rows) * width;
         tile_y = (j / num_rows) * height;
         tile_number = i + j * num_rows;
-        tile_hue = map(tile_number, 0, num_tiles, 0, 360);
+        tile_hue = map(tile_number, 0, num_tiles, 150, 290);
         tile = new Tile(tile_height, tile_width, tile_x, tile_y, tile_hue);
+        tile.dir = int(random(0, 4));
         tiles.push(tile);
       }
     }

@@ -15,7 +15,15 @@ function setup() {
         tile_y = (j / num_rows) * height;
         tile_number = i + j * num_rows;
         tile_hue = map(tile_number, 0, num_tiles, 0, 360);
-        tile = new Tile(tile_height, tile_width, tile_x, tile_y, tile_hue);
+        tile = new Tile(
+          tile_height,
+          tile_width,
+          random(width),
+          random(height),
+          tile_hue
+        );
+        tile.dest_x = tile_x;
+        tile.dest_y = tile_y;
         tiles.push(tile);
       }
     }
@@ -27,8 +35,9 @@ function draw() {
   for (let tile of tiles) {
     spread = 15;
     tile.draw();
-    tile.move(random(-tile.width * 0.5, tile.width * 0.5), tile.height * 0.1);
-    tile.wrap();
+    // tile.move(random(-tile.width * 0.5, tile.width * 0.5), tile.height * 0.1);
+    tile.translate(tile.dest_x, tile.dest_y, frameCount / 100);
+    // tile.wrap();
   }
 }
 
@@ -36,6 +45,8 @@ class Tile {
   constructor(tile_height, tile_width, x, y, tile_hue) {
     this.x = x;
     this.y = y;
+    this.start_x = x;
+    this.start_y = y;
     this.width = tile_width;
     this.height = tile_height;
     this.hue = tile_hue;
@@ -66,6 +77,12 @@ class Tile {
     }
     if (this.y < -this.height) {
       this.y = height;
+    }
+  }
+  translate(x, y, percent) {
+    if (percent <= 1) {
+      this.x = lerp(this.start_x, x, percent);
+      this.y = lerp(this.start_y, y, percent);
     }
   }
 }
