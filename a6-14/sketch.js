@@ -17,8 +17,9 @@ function setup() {
       tile = new Tile(
         tile_height,
         tile_width,
-        random(width),
-        random(height),
+        tile_y,
+        tile_x,
+        // map(int(random(0, num_rows)), 0, num_rows, 0, height),
         tile_hue
       );
       tile.dest_x = tile_x;
@@ -35,7 +36,6 @@ function draw() {
   for (let tile of tiles) {
     spread = 15;
     tile.draw();
-    // tile.move(random(-tile.width * 0.5, tile.width * 0.5), tile.height * 0.1);
     if (count <= anim_frames) {
       p = easeInOutQuad(count / anim_frames);
       if (tile.to_start) {
