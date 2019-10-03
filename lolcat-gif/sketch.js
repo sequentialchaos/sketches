@@ -21,7 +21,7 @@ function setup() {
 
   cat_x = 15;
   cat_y = size * 0.725;
-  cat = new Emoji(font, "🦡", size * 0.88, cat_x, cat_y);
+  cat = new Emoji(font, "🦥", size * 0.88, cat_x, cat_y);
   // caption = new Emoji(
   //   font2,
   //   "don't litter",
@@ -35,7 +35,7 @@ function setup() {
   textSize(70);
   textAlign(CENTER);
 
-  record = true;
+  record = false;
   if (record) {
     capturer = new CCapture({
       framerate: 60,

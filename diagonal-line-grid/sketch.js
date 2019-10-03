@@ -33,9 +33,9 @@ function drawGrid() {
     stroke(l.color);
     line(l.x1, l.y1, l.x2, l.y2);
   }
-  if (frameCount < frame_rate * 2) {
-    showHelperText();
-  }
+  // if (frameCount < frame_rate * 2) {
+  //   showHelperText();
+  // }
 }
 
 function makeGrid() {

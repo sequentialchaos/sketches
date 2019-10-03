@@ -28,6 +28,10 @@ function draw() {
   }
 }
 
+function easeInOutQuad(t) {
+  return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+}
+
 class Emoji {
   constructor(font, text, fontsize, x, y) {
     this.font = font;
@@ -150,7 +154,7 @@ class Emoji {
   }
 
   unscatter(point_diameter, start_frame, anim_frames, frame_count) {
-    let percent = frame_count / (start_frame + anim_frames);
+    let percent = easeInOutQuad(frame_count / (start_frame + anim_frames));
     for (let i = 0; i < this.scattered_points.length; i++) {
       let p1 = this.scattered_points[i];
       let p2 = this.points[i];
