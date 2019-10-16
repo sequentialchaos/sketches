@@ -12,7 +12,7 @@ function setup() {
     y: 0
   };
 
-  r = 0;
+  r = 1;
   r_delta = min(width, height) / frame_rate / 1.5;
   r_max = max(width, height);
 
@@ -50,3 +50,7 @@ function mousePressed() {
     looping = true;
   }
 }
+
+// function easeInOutQuad(t) {
+//   return t < 0.5 ? 2 * t * t : -1 + (4 - 2 * t) * t;
+// }
