@@ -10,12 +10,12 @@ function setup() {
   i = 0;
   j = 0;
   p = PI;
-  r = max(width, height) * 0.85;
+  r = max(width, height) * 1;
 }
 
 function draw() {
   translate(width / 2, height / 2);
-  background(0, 0.05);
+  background(0, 0.03);
   for (let w = 0; w < numTriangles; w++) {
     t = i + w;
     let p1 = maurer(t, n, d, r);
