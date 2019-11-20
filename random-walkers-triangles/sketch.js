@@ -29,7 +29,7 @@ function setup() {
           random(max_hue),
           1,
           1,
-          map(_spread, 0, max_spread, 0.5, 0.05)
+          map(_spread, 0, max_spread, 0.5, 0.15)
         )
       })
     )

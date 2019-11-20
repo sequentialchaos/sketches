@@ -14,6 +14,13 @@ body {
   padding: 0;
 }
 
+figcaption {
+  display: flex;
+  justify-content: center;
+  /* margin-top: -2em; */
+  color: white;
+}
+
 .title {
   padding: 0;
   margin: 0.4em 0.6em;
