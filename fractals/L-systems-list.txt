@@ -1,9 +1,0 @@
-donut flame = (
-  axiom = 'F+F+F+F+F+F',
-  rules = {
-    F: '+F+F-F'
-  },
-  len = 20,
-  angle = 60,
-  iterations = 4
-)
